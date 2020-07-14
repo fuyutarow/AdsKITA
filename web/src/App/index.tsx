@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { BrowserRouter, Switch, Route, Link } from 'react-router-dom';
 
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import { AuthContext, AuthProvider } from 'contexts/auth';
 import { routes } from 'router';
 
@@ -47,6 +50,7 @@ const App = () => (
         {Object.values(routes).map(route => <Route {...route} />)}
       </Switch>
     </BrowserRouter>
+    <ToastContainer />
   </AuthProvider>
 );
 
