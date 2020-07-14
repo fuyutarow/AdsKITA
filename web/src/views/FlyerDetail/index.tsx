@@ -17,6 +17,7 @@ import { Flyer } from 'models';
 import { AuthContext, AuthProvider, AuthContextProps } from 'contexts/auth';
 import AppHeader from 'components/AppHeader';
 import AppFooter from 'components/AppFooter';
+import { routes } from 'router';
 
 const MyDropzone: React.FC<{
   setImageURL: React.Dispatch<React.SetStateAction<string | null>>;
@@ -156,6 +157,14 @@ const NewTicketEditor: React.FC<{ auth: AuthContextProps }> = ({ auth }) => {
           }
           <div>
             <SaveButton />
+            <span style={{ padding: '0 5px 0 5px' }} ></span>
+            <Button color='primary' variant='contained'
+              onClick={e => {
+                history.push(routes.pubs.path.replace(':id', flyerId));
+              }}
+            >
+              プレビュー
+            </Button>
           </div>
         </Paper>
       </Container>

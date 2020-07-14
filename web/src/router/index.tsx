@@ -5,17 +5,15 @@ import TicketList from 'views/TicketList';
 import SwipeList from 'views/SwipeList';
 import About from 'views/About';
 import NotFound from 'views/NotFound';
-import NewTicket from 'views/NewTicket';
+import PublishedFlyer from 'views/PublishedFlyer';
 import NewFlyer from 'views/NewFlyer';
 import FlyerDetail from 'views/FlyerDetail';
 import PurchasedTicketList from 'views/PurchasedTicketList';
 import ProductHeroLayout from 'views/ProductHeroLayout';
 import AppFooter from 'components/AppFooter';
 import Lab from 'views/Lab';
-import AdView from 'views/AdView';
 
-import LoginView from 'views/LoginView';
-import Logout from 'components/Logout';
+import LoginView from 'views/LoginView'; import Logout from 'components/Logout';
 import AppHeader from 'components/AppHeader';
 
 import { BrowserRouter, Switch, Route, Link } from 'react-router-dom';
@@ -52,9 +50,9 @@ export const routes = {
     path: '/flyers/:flyerId',
     component: FlyerDetail,
   },
-  ads: {
-    path: '/ads/:id',
-    component: AdView,
+  pubs: {
+    path: '/pubs/:id',
+    component: PublishedFlyer,
   },
   about: {
     path: '/about',
