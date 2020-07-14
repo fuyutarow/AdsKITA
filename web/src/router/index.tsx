@@ -11,6 +11,7 @@ import PurchasedTicketList from 'views/PurchasedTicketList';
 import ProductHeroLayout from 'views/ProductHeroLayout';
 import AppFooter from 'components/AppFooter';
 import Lab from 'views/Lab';
+import AdView from 'views/AdView';
 
 import LoginView from 'views/LoginView';
 import Logout from 'components/Logout';
@@ -46,8 +47,13 @@ export const routes = {
     component: LoginView,
   },
   lab: {
+    exact: true,
     path: '/lab',
     component: Lab,
+  },
+  ads: {
+    path: '/ads/:id',
+    component: AdView,
   },
   about: {
     path: '/about',
