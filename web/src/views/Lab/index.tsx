@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import ImageUploader from 'react-images-upload';
 
-import { debug } from 'plugins/debug';
+import { debug, sampleBase64 } from 'plugins/debug';
+
 
 const App = () => {
   const [pictures, setPictures] = useState<Array<any>>([]);
@@ -33,8 +34,11 @@ export default () => {
 
   return (
     <>
-      <App />
-      <div>inner</div>
+      <img {...{
+        src: sampleBase64,
+        width: 300,
+        height: 300,
+      }}/>
       <iframe
         {...{
           title: 'fmfm',
