@@ -10,6 +10,7 @@ export interface Flyer {
   id: FlyerId;
   imageURL: string;
   size: Array<number>;
+  linkURL: string;
   ownerId: UserId;
 }
 

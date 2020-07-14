@@ -11,6 +11,7 @@ import { colors } from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import ImageIcon from '@material-ui/icons/Image';
 import Paper from '@material-ui/core/Paper';
+import TextField from '@material-ui/core/TextField';
 
 import { debug } from 'plugins/debug';
 import { db } from 'plugins/firebase';
@@ -20,6 +21,8 @@ import { routes } from 'router';
 import { AuthContext, AuthProvider, AuthContextProps } from 'contexts/auth';
 import AppHeader from 'components/AppHeader';
 import AppFooter from 'components/AppFooter';
+
+import isURL from 'is-url';
 
 const MyDropzone: React.FC<{
   setImageURL: React.Dispatch<React.SetStateAction<string | null>>;
@@ -87,6 +90,7 @@ const NewTicketEditor: React.FC<{ auth: AuthContextProps }> = ({ auth }) => {
       id: flyerId,
       imageURL,
       size: [300, 250],
+      linkURL: '',
       ownerId: currentUser.id,
     };
     db.collection('flyers').doc(flyerId).set(flyer);
@@ -117,6 +121,10 @@ const NewTicketEditor: React.FC<{ auth: AuthContextProps }> = ({ auth }) => {
       );
   };
 
+  const [linkURL, setLinkURL] = useState<string >('');
+
+  const validation = linkURL === '' || linkURL && isURL(linkURL);
+
   return (
     <>
       <AppHeader />
@@ -127,6 +135,20 @@ const NewTicketEditor: React.FC<{ auth: AuthContextProps }> = ({ auth }) => {
         <Paper style={{
           padding: 20,
         }}>
+          <div>
+            <TextField
+              label="リンク先URL"
+              placeholder="https://example.com"
+              helperText={(!validation) && 'URLが正しくありません'}
+              fullWidth
+              margin="normal"
+              InputLabelProps={{ shrink: true }}
+              variant="outlined"
+              value={linkURL}
+              error={!validation}
+              onChange={e => { setLinkURL(e.target.value); }}
+            />
+          </div>
           <div>規格: 300 x 250</div>
           <MyDropzone {...{ setImageURL }} />
           {imageURL &&

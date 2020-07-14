@@ -19,6 +19,8 @@ import AppHeader from 'components/AppHeader';
 import AppFooter from 'components/AppFooter';
 import { routes } from 'router';
 
+import isURL from 'is-url';
+
 const MyDropzone: React.FC<{
   setImageURL: React.Dispatch<React.SetStateAction<string | null>>;
 }> = ({ setImageURL }) => {
@@ -85,7 +87,6 @@ const NewTicketEditor: React.FC<{ auth: AuthContextProps }> = ({ auth }) => {
       const listener = db.collection('flyers').doc(flyerId)
         .onSnapshot(doc => {
           const flyer = doc.data() as Flyer || null;
-          debug('ls', flyer, flyerId);
           setFlyer(flyer);
         });
       return () => listener();
@@ -100,6 +101,7 @@ const NewTicketEditor: React.FC<{ auth: AuthContextProps }> = ({ auth }) => {
       id: flyer.id,
       imageURL: imageURL || flyer.imageURL,
       size: [300, 250],
+      linkURL: '',
       ownerId: currentUser.id,
     };
     db.collection('flyers').doc(flyerId).set(currentFlyer);
