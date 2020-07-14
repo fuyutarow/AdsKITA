@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 
 export default () => {
   const { id: adId } = useParams();
+
   return (
     <>
       <div>inner</div>

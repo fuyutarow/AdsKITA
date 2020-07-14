@@ -43,7 +43,6 @@ const NotLoginView = () => {
 const App = () => (
   <AuthProvider>
     <BrowserRouter>
-      <AppHeader />
       <Switch>
         {Object.values(routes).map(route => <Route {...route} />)}
       </Switch>

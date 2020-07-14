@@ -18,6 +18,7 @@ import AddIcon from '@material-ui/icons/Add';
 import { db } from 'plugins/firebase';
 import { AuthContext, AuthProvider } from 'contexts/auth';
 import TicketCard from 'components/TicketCard';
+import AppHeader from 'components/AppHeader';
 import AppFooter from 'components/AppFooter';
 
 import { Ticket, TicketStatus } from 'models';
@@ -45,6 +46,7 @@ export default () => {
 
   return (
     <>
+      <AppHeader />
       <Container maxWidth="sm" disableGutters>
         <Grid container spacing={3}>
           {
