@@ -24,6 +24,7 @@ import {
 import { db } from 'plugins/firebase';
 import { Ticket, TicketStatus, NewTicket, UserInfo } from 'models';
 import { AuthContext, AuthProvider, AuthContextProps } from 'contexts/auth';
+import AppHeader from 'components/AppHeader';
 import AppFooter from 'components/AppFooter';
 
 import { v4 as uuid } from 'uuid';
@@ -135,6 +136,7 @@ const NewTicketEditor: React.FC<{ auth: AuthContextProps}> = ({ auth }) => {
 
   return (
     <>
+      <AppHeader />
       <Container maxWidth="sm" disableGutters>
         <Paper>
           <Box>
