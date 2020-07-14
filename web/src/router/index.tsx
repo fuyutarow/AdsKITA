@@ -10,6 +10,7 @@ import NewTicket from 'views/NewTicket';
 import PurchasedTicketList from 'views/PurchasedTicketList';
 import ProductHeroLayout from 'views/ProductHeroLayout';
 import AppFooter from 'components/AppFooter';
+import Lab from 'views/Lab';
 
 import LoginView from 'views/LoginView';
 import Logout from 'components/Logout';
@@ -43,6 +44,10 @@ export const routes = {
   login: {
     path: '/login',
     component: LoginView,
+  },
+  lab: {
+    path: '/lab',
+    component: Lab,
   },
   about: {
     path: '/about',
