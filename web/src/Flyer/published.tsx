@@ -22,11 +22,13 @@ export default () => {
 
   return flyer
     ? (
-      <img {...{
-        width: 300,
-        height: 250,
-        src: flyer.imageURL,
-      }} />
+      <a href={flyer.linkURL}>
+        <img {...{
+          width: 300,
+          height: 250,
+          src: flyer.imageURL,
+        }} />
+      </a>
     )
     : null;
 };
