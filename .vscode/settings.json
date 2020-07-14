@@ -1,0 +1,15 @@
+{
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "todo-tree.highlights.customHighlight": {
+    "NOTE": {
+      "icon": "check",
+      "type": "line"
+    },
+    "WANNADO": {
+      "icon": "check",
+      "type": "line"
+    },
+  }
+}
