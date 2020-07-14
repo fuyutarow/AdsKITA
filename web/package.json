@@ -1,6 +1,6 @@
 {
   "name": "adskita",
-  "version": "0.202007.1",
+  "version": "0.202007.2",
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.10.2",
