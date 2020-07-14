@@ -1,6 +1,6 @@
 {
-  "name": "sairilab.now.sh",
-  "version": "0.1.0",
+  "name": "adskita",
+  "version": "0.202007.0",
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.10.2",
