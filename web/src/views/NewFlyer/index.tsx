@@ -14,6 +14,7 @@ import Paper from '@material-ui/core/Paper';
 
 import { debug } from 'plugins/debug';
 import { db } from 'plugins/firebase';
+import { toastNotice } from 'plugins/toast';
 import { Flyer } from 'models';
 import { routes } from 'router';
 import { AuthContext, AuthProvider, AuthContextProps } from 'contexts/auth';
@@ -89,6 +90,7 @@ const NewTicketEditor: React.FC<{ auth: AuthContextProps }> = ({ auth }) => {
       ownerId: currentUser.id,
     };
     db.collection('flyers').doc(flyerId).set(flyer);
+    toastNotice('広告素材を保存しました', { color: colors.green[500] });
   };
 
   const SaveButton = () => {
