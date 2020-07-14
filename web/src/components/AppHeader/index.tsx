@@ -17,8 +17,8 @@ import {
 
 import PersonIcon from '@material-ui/icons/Person';
 
+import { version } from 'plugins/env';
 import { AuthContext, AuthProvider } from 'contexts/auth';
-import { auth } from 'firebase';
 // import style from 'style.module.css';
 
 const useStyles = makeStyles({
@@ -107,6 +107,7 @@ export default () => {
         <Link to="/tickets">
           <img src="/icon.png" className={classes.logo} alt="logo" />
         </Link>
+        <span style={{ padding: '0 10px 0 10px' }}>{`v${version}`}</span>
         {/* <Button>
             <Typography variant="h6" >
               チケットを探す
