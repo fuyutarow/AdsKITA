@@ -14,7 +14,7 @@ import Paper from '@material-ui/core/Paper';
 
 import { debug } from 'plugins/debug';
 import { db } from 'plugins/firebase';
-import { Ticket, TicketStatus, NewTicket, UserInfo } from 'models';
+import { Flyer } from 'models';
 import { AuthContext, AuthProvider, AuthContextProps } from 'contexts/auth';
 import AppHeader from 'components/AppHeader';
 import AppFooter from 'components/AppFooter';
@@ -76,6 +76,42 @@ const NewTicketEditor: React.FC<{ auth: AuthContextProps }> = ({ auth }) => {
   const currentUser = auth.currentUser;
 
   const [imageURL, setImageURL] = useState<string | null>(null);
+  const paperId = uuid();
+
+  const onSave = () => {
+    if (!imageURL) return;
+
+    const flyer: Flyer = {
+      id: paperId,
+      imageURL,
+      size: [300, 250],
+      ownerId: currentUser.id,
+    };
+    db.collection('flyers').doc(paperId).set(flyer);
+  };
+
+  const SaveButton = () => {
+    const [clicked, setClicked] = useState(false);
+
+    const disabled = (!imageURL) || clicked;
+    return disabled
+      ? <Button disabled={disabled} variant='contained'>保存</Button>
+      : (
+        <Button
+          variant='contained'
+          style={{
+            color: 'white',
+            backgroundColor: colors.green[500],
+          }}
+          onClick={e => {
+            setClicked(true);
+            onSave();
+          }}
+        >
+          保存
+        </Button>
+      );
+  };
 
   return (
     <>
@@ -98,19 +134,7 @@ const NewTicketEditor: React.FC<{ auth: AuthContextProps }> = ({ auth }) => {
 
           }
           <div>
-            <Button
-              variant='contained'
-              style={{
-                color: 'white',
-                backgroundColor: colors.green[500],
-              }}
-              onClick={e => {
-                const paperId = uuid();
-                alert(paperId);
-              }}
-            >
-              保存
-            </Button>
+            <SaveButton />
           </div>
         </Paper>
       </Container>

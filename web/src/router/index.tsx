@@ -7,7 +7,7 @@ import About from 'views/About';
 import NotFound from 'views/NotFound';
 import TicketDetail from 'views/TicketDetail';
 import NewTicket from 'views/NewTicket';
-import NewPaper from 'views/NewPaper';
+import NewFlyer from 'views/NewFlyer';
 import PurchasedTicketList from 'views/PurchasedTicketList';
 import ProductHeroLayout from 'views/ProductHeroLayout';
 import AppFooter from 'components/AppFooter';
@@ -39,17 +39,17 @@ export const routes = {
     path: '/lab',
     component: Lab,
   },
-  paperNew: {
-    path: '/papers/new',
-    component: NewPaper,
+  flyerNew: {
+    path: '/flyers/new',
+    component: NewFlyer,
   },
-  paperList: {
+  flyerList: {
     exact: true,
-    path: '/papers/',
+    path: '/flyers/',
     component: TicketList,
   },
-  paperDetail: {
-    path: '/papers/:paperId',
+  flyerDetail: {
+    path: '/flyers/:flyerId',
     component: TicketDetail,
   },
   ads: {
