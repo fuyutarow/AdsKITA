@@ -5,7 +5,9 @@ import { Link, useParams, useHistory } from 'react-router-dom';
 
 import { useDropzone } from 'react-dropzone';
 
+import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
+import { colors } from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import ImageIcon from '@material-ui/icons/Image';
 import Paper from '@material-ui/core/Paper';
@@ -95,6 +97,21 @@ const NewTicketEditor: React.FC<{ auth: AuthContextProps }> = ({ auth }) => {
             }} />
 
           }
+          <div>
+            <Button
+              variant='contained'
+              style={{
+                color: 'white',
+                backgroundColor: colors.green[500],
+              }}
+              onClick={e => {
+                const paperId = uuid();
+                alert(paperId);
+              }}
+            >
+              保存
+            </Button>
+          </div>
         </Paper>
       </Container>
       <AppFooter />
