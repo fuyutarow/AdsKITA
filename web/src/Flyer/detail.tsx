@@ -1,5 +1,4 @@
 import { v4 as uuid } from 'uuid';
-import isURL from 'is-url';
 import React, { useState, useEffect, useContext, useCallback } from 'react';
 import { Link, useParams, useHistory } from 'react-router-dom';
 
@@ -7,7 +6,6 @@ import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
 import { colors } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
-import TextField from '@material-ui/core/TextField';
 
 import { debug } from 'plugins/debug';
 import { db } from 'plugins/firebase';
@@ -18,6 +16,7 @@ import { AuthContext, AuthProvider, AuthContextProps } from 'contexts/auth';
 import AppHeader from 'components/AppHeader';
 import AppFooter from 'components/AppFooter';
 import InputImage from './inputImage';
+import InputLinkURL, { isValidURL } from './inputLinkURL';
 
 export default () => {
   const auth = useContext(AuthContext);
@@ -35,12 +34,12 @@ export default () => {
 
 const NewTicketEditor: React.FC<{ auth: AuthContextProps }> = ({ auth }) => {
   const history = useHistory();
-  const { flyerId } = useParams();
   const currentUser = auth.currentUser;
 
-  const [imageURL, setImageURL] = useState<string | null>(null);
-
+  const { flyerId } = useParams();
   const [flyer, setFlyer] = useState<Flyer | null>(null);
+  const [imageURL, setImageURL] = useState<string | null>(null);
+  const [linkURL, setLinkURL] = useState<string>('');
 
   useEffect(
     () => {
@@ -48,11 +47,18 @@ const NewTicketEditor: React.FC<{ auth: AuthContextProps }> = ({ auth }) => {
         .onSnapshot(doc => {
           const flyer = doc.data() as Flyer || null;
           setFlyer(flyer);
+          setLinkURL(flyer.linkURL);
         });
       return () => listener();
     },
     [flyerId],
   );
+
+  if (!flyer) return null;
+  const currnetLinkURL = isValidURL(linkURL) && linkURL !== flyer.linkURL
+    ? linkURL
+    : flyer.linkURL;
+  const valid = currnetLinkURL !== flyer.linkURL || Boolean(imageURL);
 
   const onSave = () => {
     if (!flyer) return;
@@ -61,7 +67,7 @@ const NewTicketEditor: React.FC<{ auth: AuthContextProps }> = ({ auth }) => {
       id: flyer.id,
       imageURL: imageURL || flyer.imageURL,
       size: [300, 250],
-      linkURL: '',
+      linkURL: currnetLinkURL,
       ownerId: currentUser.id,
     };
     db.collection('flyers').doc(flyerId).set(currentFlyer);
@@ -70,8 +76,8 @@ const NewTicketEditor: React.FC<{ auth: AuthContextProps }> = ({ auth }) => {
 
   const SaveButton = () => {
     const [clicked, setClicked] = useState(false);
+    const disabled = (!valid) || clicked;
 
-    const disabled = (!imageURL) || clicked;
     return disabled
       ? <Button disabled={disabled} variant='contained'>保存</Button>
       : (
@@ -101,6 +107,12 @@ const NewTicketEditor: React.FC<{ auth: AuthContextProps }> = ({ auth }) => {
         <Paper style={{
           padding: 20,
         }}>
+          <div>
+            <InputLinkURL {...{
+              linkURL: linkURL === '' ? flyer.linkURL : linkURL,
+              setLinkURL,
+            }} />
+          </div>
           <div>規格: 300 x 250</div>
           <InputImage {...{ setImageURL }} />
           {imageURL &&
@@ -110,7 +122,7 @@ const NewTicketEditor: React.FC<{ auth: AuthContextProps }> = ({ auth }) => {
               src: imageURL,
             }} />
           }
-          {(!imageURL) && flyer && flyer.imageURL &&
+          {(!imageURL) && flyer.imageURL &&
             <img {...{
               width: 300,
               height: 250,

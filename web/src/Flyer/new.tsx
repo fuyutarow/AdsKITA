@@ -1,5 +1,4 @@
 import { v4 as uuid } from 'uuid';
-import isURL from 'is-url';
 import React, { useState, useEffect, useContext, useCallback } from 'react';
 import { Link, useParams, useHistory } from 'react-router-dom';
 
@@ -7,7 +6,6 @@ import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
 import { colors } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
-import TextField from '@material-ui/core/TextField';
 
 import { debug } from 'plugins/debug';
 import { db } from 'plugins/firebase';
@@ -18,6 +16,7 @@ import { AuthContext, AuthProvider, AuthContextProps } from 'contexts/auth';
 import AppHeader from 'components/AppHeader';
 import AppFooter from 'components/AppFooter';
 import InputImage from './inputImage';
+import InputLinkURL, { isValidURL } from './inputLinkURL';
 
 export default () => {
   const auth = useContext(AuthContext);
@@ -37,8 +36,10 @@ const NewTicketEditor: React.FC<{ auth: AuthContextProps }> = ({ auth }) => {
   const history = useHistory();
   const currentUser = auth.currentUser;
 
-  const [imageURL, setImageURL] = useState<string | null>(null);
   const flyerId = uuid();
+  const [imageURL, setImageURL] = useState<string | null>(null);
+  const [linkURL, setLinkURL] = useState<string>('');
+  const valid = isValidURL(linkURL) && imageURL;
 
   const onSave = () => {
     if (!imageURL) return;
@@ -47,7 +48,7 @@ const NewTicketEditor: React.FC<{ auth: AuthContextProps }> = ({ auth }) => {
       id: flyerId,
       imageURL,
       size: [300, 250],
-      linkURL: '',
+      linkURL,
       ownerId: currentUser.id,
     };
     db.collection('flyers').doc(flyerId).set(flyer);
@@ -56,10 +57,10 @@ const NewTicketEditor: React.FC<{ auth: AuthContextProps }> = ({ auth }) => {
 
   const SaveButton = () => {
     const [clicked, setClicked] = useState(false);
+    const disabled = (!valid) || clicked;
 
-    const disabled = (!imageURL) || clicked;
     return disabled
-      ? <Button disabled={disabled} variant='contained'>保存</Button>
+      ? <Button disabled={disabled || clicked} variant='contained'>保存</Button>
       : (
         <Button
           variant='contained'
@@ -78,10 +79,6 @@ const NewTicketEditor: React.FC<{ auth: AuthContextProps }> = ({ auth }) => {
       );
   };
 
-  const [linkURL, setLinkURL] = useState<string >('');
-
-  const validation = linkURL === '' || linkURL && isURL(linkURL);
-
   return (
     <>
       <AppHeader />
@@ -93,18 +90,7 @@ const NewTicketEditor: React.FC<{ auth: AuthContextProps }> = ({ auth }) => {
           padding: 20,
         }}>
           <div>
-            <TextField
-              label="リンク先URL"
-              placeholder="https://example.com"
-              helperText={(!validation) && 'URLが正しくありません'}
-              fullWidth
-              margin="normal"
-              InputLabelProps={{ shrink: true }}
-              variant="outlined"
-              value={linkURL}
-              error={!validation}
-              onChange={e => { setLinkURL(e.target.value); }}
-            />
+            <InputLinkURL {...{ linkURL, setLinkURL }} />
           </div>
           <div>規格: 300 x 250</div>
           <InputImage {...{ setImageURL }} />
