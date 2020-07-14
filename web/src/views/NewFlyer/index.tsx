@@ -50,7 +50,7 @@ const MyDropzone: React.FC<{
     <div {...getRootProps()} style={{
     }}>
       <input {...getInputProps()} />
-      画像をアップロード
+      広告素材をアップロード
       <IconButton>
         <ImageIcon />
       </IconButton>

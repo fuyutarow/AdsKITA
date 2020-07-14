@@ -1,5 +1,3 @@
-import { v4 as uuid } from 'uuid';
-
 import React, { useState, useEffect, useContext, useCallback } from 'react';
 import { Link, useParams, useHistory } from 'react-router-dom';
 
@@ -49,7 +47,7 @@ const MyDropzone: React.FC<{
     <div {...getRootProps()} style={{
     }}>
       <input {...getInputProps()} />
-      画像をアップロード
+      広告素材をアップロード
       <IconButton>
         <ImageIcon />
       </IconButton>
@@ -77,7 +75,6 @@ const NewTicketEditor: React.FC<{ auth: AuthContextProps }> = ({ auth }) => {
   const currentUser = auth.currentUser;
 
   const [imageURL, setImageURL] = useState<string | null>(null);
-  const paperId = uuid();
 
   const [flyer, setFlyer] = useState<Flyer | null>(null);
 
@@ -95,15 +92,15 @@ const NewTicketEditor: React.FC<{ auth: AuthContextProps }> = ({ auth }) => {
   );
 
   const onSave = () => {
-    if (!imageURL) return;
+    if (!flyer) return;
 
-    const flyer: Flyer = {
-      id: paperId,
-      imageURL,
+    const currentFlyer: Flyer = {
+      id: flyer.id,
+      imageURL: imageURL || flyer.imageURL,
       size: [300, 250],
       ownerId: currentUser.id,
     };
-    db.collection('flyers').doc(paperId).set(flyer);
+    db.collection('flyers').doc(flyerId).set(currentFlyer);
   };
 
   const SaveButton = () => {
@@ -139,9 +136,6 @@ const NewTicketEditor: React.FC<{ auth: AuthContextProps }> = ({ auth }) => {
         <Paper style={{
           padding: 20,
         }}>
-          <button onClick={e => {
-            debug(flyer);
-          }}>dbg</button>
           <div>規格: 300 x 250</div>
           <MyDropzone {...{ setImageURL }} />
           {imageURL &&
