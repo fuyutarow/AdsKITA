@@ -7,6 +7,7 @@ import About from 'views/About';
 import NotFound from 'views/NotFound';
 import TicketDetail from 'views/TicketDetail';
 import NewTicket from 'views/NewTicket';
+import NewPaper from 'views/NewPaper';
 import PurchasedTicketList from 'views/PurchasedTicketList';
 import ProductHeroLayout from 'views/ProductHeroLayout';
 import AppFooter from 'components/AppFooter';
@@ -25,22 +26,9 @@ export const routes = {
     path: '/',
     component: Home,
   },
-  ticketNew: {
-    path: '/tickets/new',
-    component: NewTicket,
-  },
-  ticketDetail: {
-    path: '/tickets/:ticketId',
-    component: TicketDetail,
-  },
   purchasedTicketList: {
     path: '/u/:userId/purchased',
     component: PurchasedTicketList,
-  },
-  ticketList: {
-    exact: true,
-    path: '/tickets',
-    component: TicketList,
   },
   login: {
     path: '/login',
@@ -50,6 +38,19 @@ export const routes = {
     exact: true,
     path: '/lab',
     component: Lab,
+  },
+  paperNew: {
+    path: '/papers/new',
+    component: NewPaper,
+  },
+  paperList: {
+    exact: true,
+    path: '/papers/',
+    component: TicketList,
+  },
+  paperDetail: {
+    path: '/papers/:paperId',
+    component: TicketDetail,
   },
   ads: {
     path: '/ads/:id',
