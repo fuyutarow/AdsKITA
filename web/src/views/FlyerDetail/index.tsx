@@ -15,7 +15,6 @@ import Paper from '@material-ui/core/Paper';
 import { debug } from 'plugins/debug';
 import { db } from 'plugins/firebase';
 import { Flyer } from 'models';
-import { routes } from 'router';
 import { AuthContext, AuthProvider, AuthContextProps } from 'contexts/auth';
 import AppHeader from 'components/AppHeader';
 import AppFooter from 'components/AppFooter';
@@ -74,21 +73,37 @@ export default () => {
 
 const NewTicketEditor: React.FC<{ auth: AuthContextProps }> = ({ auth }) => {
   const history = useHistory();
+  const { flyerId } = useParams();
   const currentUser = auth.currentUser;
 
   const [imageURL, setImageURL] = useState<string | null>(null);
-  const flyerId = uuid();
+  const paperId = uuid();
+
+  const [flyer, setFlyer] = useState<Flyer | null>(null);
+
+  useEffect(
+    () => {
+      const listener = db.collection('flyers').doc(flyerId)
+        .onSnapshot(doc => {
+          const flyer = doc.data() as Flyer || null;
+          debug('ls', flyer, flyerId);
+          setFlyer(flyer);
+        });
+      return () => listener();
+    },
+    [flyerId],
+  );
 
   const onSave = () => {
     if (!imageURL) return;
 
     const flyer: Flyer = {
-      id: flyerId,
+      id: paperId,
       imageURL,
       size: [300, 250],
       ownerId: currentUser.id,
     };
-    db.collection('flyers').doc(flyerId).set(flyer);
+    db.collection('flyers').doc(paperId).set(flyer);
   };
 
   const SaveButton = () => {
@@ -107,10 +122,9 @@ const NewTicketEditor: React.FC<{ auth: AuthContextProps }> = ({ auth }) => {
           onClick={e => {
             setClicked(true);
             onSave();
-            history.push(routes.flyerDetail.path.replace(':flyerId', flyerId));
           }}
         >
-          保存
+          更新
         </Button>
       );
   };
@@ -125,6 +139,9 @@ const NewTicketEditor: React.FC<{ auth: AuthContextProps }> = ({ auth }) => {
         <Paper style={{
           padding: 20,
         }}>
+          <button onClick={e => {
+            debug(flyer);
+          }}>dbg</button>
           <div>規格: 300 x 250</div>
           <MyDropzone {...{ setImageURL }} />
           {imageURL &&
@@ -132,6 +149,13 @@ const NewTicketEditor: React.FC<{ auth: AuthContextProps }> = ({ auth }) => {
               width: 300,
               height: 250,
               src: imageURL,
+            }} />
+          }
+          {(!imageURL) && flyer && flyer.imageURL &&
+            <img {...{
+              width: 300,
+              height: 250,
+              src: flyer.imageURL,
             }} />
           }
           <div>

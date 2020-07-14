@@ -5,9 +5,9 @@ import TicketList from 'views/TicketList';
 import SwipeList from 'views/SwipeList';
 import About from 'views/About';
 import NotFound from 'views/NotFound';
-import TicketDetail from 'views/TicketDetail';
 import NewTicket from 'views/NewTicket';
 import NewFlyer from 'views/NewFlyer';
+import FlyerDetail from 'views/FlyerDetail';
 import PurchasedTicketList from 'views/PurchasedTicketList';
 import ProductHeroLayout from 'views/ProductHeroLayout';
 import AppFooter from 'components/AppFooter';
@@ -50,7 +50,7 @@ export const routes = {
   },
   flyerDetail: {
     path: '/flyers/:flyerId',
-    component: TicketDetail,
+    component: FlyerDetail,
   },
   ads: {
     path: '/ads/:id',
