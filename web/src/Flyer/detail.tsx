@@ -79,23 +79,18 @@ const NewTicketEditor: React.FC<{ auth: AuthContextProps }> = ({ auth }) => {
     const [clicked, setClicked] = useState(false);
     const disabled = (!valid) || clicked;
 
+    const message = '更新';
+    const style = { margin: '10px 0 10px 0' };
+    const onClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+      alert('ok');
+    };
     return disabled
-      ? <Button disabled={disabled} variant='contained'>更新</Button>
-      : (
-        <Button
-          variant='contained'
-          style={{
-            color: 'white',
-            backgroundColor: colors.green[500],
-          }}
-          onClick={e => {
-            setClicked(true);
-            onSave();
-          }}
-        >
-          更新
-        </Button>
-      );
+      ? <Button disabled={disabled} variant='contained' style={{ ...style }}>{message}</Button>
+      : <Button variant='contained' onClick={onClick} style={{
+        ...style,
+        color: 'white',
+        backgroundColor: colors.green[500],
+      }}>{message}</Button>;
   };
 
   return (
@@ -142,7 +137,7 @@ const NewTicketEditor: React.FC<{ auth: AuthContextProps }> = ({ auth }) => {
             </Button>
           </div>
 
-          <hr style={{ margin: '20px 0 20px 0' }} />
+          <hr style={{ margin: '10px 0 20px 0' }} />
 
           <RequestPart flyer={flyer} />
         </Paper>

@@ -31,24 +31,18 @@ const FC: React.FC<{ flyer: Flyer }> = ({ flyer }) => {
     const [clicked, setClicked] = useState(false);
     const disabled = (!valid) || clicked;
 
+    const message = '依頼';
     const style = { margin: '10px 0 10px 0' };
+    const onClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+      alert('ok');
+    };
     return disabled
-      ? <Button disabled={disabled} variant='contained' style={{ ...style }}>依頼</Button>
-      : (
-        <Button
-          variant='contained'
-          style={{
-            ...style,
-            color: 'white',
-            backgroundColor: colors.green[500],
-          }}
-          onClick={e => {
-            alert('ok');
-          }}
-        >
-          依頼
-        </Button>
-      );
+      ? <Button disabled={disabled} variant='contained' style={{ ...style }}>{message}</Button>
+      : <Button variant='contained' onClick={onClick} style={{
+        ...style,
+        color: 'white',
+        backgroundColor: colors.green[500],
+      }}>{message}</Button>;
   };
 
   return (
