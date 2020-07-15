@@ -5,9 +5,11 @@ import firebase from 'firebase';
 import { db } from 'plugins/firebase';
 import { debug } from 'plugins/debug';
 import { isDevelopment } from 'plugins/env';
+import { routes } from 'router';
 import { PublishedFlyer } from 'models';
 
 export default () => {
+  const history = useHistory();
   const { id: pubId } = useParams();
   const [flyer, setFlyer] = useState<PublishedFlyer | null>(null);
   const [clicked, setClicked] = useState(false);
@@ -38,14 +40,23 @@ export default () => {
   const onClick = () => {
     if (!flyer) return;
 
+    setClicked(true);
+
     // parent.locationで正しいドメインで広告表示されているか判定
     if (window.parent.location.hostname !== flyer.targetDoamin) return;
+
     db.collection('pubs').doc(pubId).collection('shards').doc('0').update({
       clickCount: firebase.firestore.FieldValue.increment(1),
     });
     const href = clicked ? undefined : flyer.linkURL;
-    debug(href);
-    setClicked(true);
+    if (href) {
+      history.push({
+        pathname: routes.redirect.path,
+        state: {
+          toURL: href,
+        },
+      });
+    }
   };
 
   if (!flyer) return null;
@@ -63,11 +74,11 @@ export default () => {
     : (
       <div>
         {isDevelopment &&
-          <button onClick={onClick}>dbg</button>
+            <button onClick={onClick}>dbg</button>
         }
-        <a href={flyer.linkURL} onClick={onClick}>
+        <div onClick={onClick}>
           <IMG />
-        </a>
+        </div>
       </div >
     );
 };
