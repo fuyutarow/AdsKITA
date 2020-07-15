@@ -38,7 +38,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "build:CI": "CI= react-scripts build",
+    "build:CI": "CI=true react-scripts build",
     "test": "react-scripts test",
     "lint": "eslint . --fix -c .eslintrc.js --ext js,jsx,ts,tsx --ignore-pattern='!.*'",
     "eject": "react-scripts eject"
