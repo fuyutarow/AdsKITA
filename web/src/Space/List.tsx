@@ -64,10 +64,10 @@ const DomainView: React.FC<{ hostname: string }> = ({ hostname }) => {
   return (
     <Card style={cardStyle(breakpoint)}>
       <CardActionArea onClick={e => {
-        // history.push({
-        //   pathname: routes.requestDetail.path
-        //     .replace(':id', flyer.pubId),
-        // });
+        history.push({
+          pathname: routes.requestListWithSpace.path
+            .replace(':spaceId', encodeURIComponent(hostname)),
+        });
       }}>
         <div style={{
           ...cardStyle(breakpoint),

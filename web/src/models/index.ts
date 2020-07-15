@@ -35,6 +35,13 @@ export type UserInfo = UserInfoCore & {
   domains: Array<string>;
 }
 
+export interface DomainSpace {
+  domain: string;
+  ownerId: UserId;
+  createdAt: Timestamp;
+  pulledAt: Timestamp;
+}
+
 export enum TicketStatus {
   onSale = 'onSale',
   soldOut = 'soldOut',

@@ -1,4 +1,5 @@
 import isURL from 'is-url';
+import moment from 'moment';
 import firebase from 'firebase';
 import React, { useState, useEffect, useContext, useCallback } from 'react';
 
@@ -7,6 +8,7 @@ import { colors } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 
 import { db } from 'plugins/firebase';
+import { Timestamp, DomainSpace } from 'models';
 import { AuthContext } from 'contexts/auth';
 import { getHostname } from 'utils';
 
@@ -48,11 +50,22 @@ const InputDomain: React.FC<{
   const pushDomain = () => {
     if (!auth) return;
     const domain = getHostname(domainURL);
+    if (!domain) return;
 
-    // IDEA: ☆つけたらcollection('spaces')に追加してあげよう
+    const domainSpace: DomainSpace = {
+      domain: domain,
+      ownerId: auth.user.id,
+      createdAt: Timestamp.now(),
+      pulledAt: Timestamp.fromDate(moment('20200123').toDate()),
+    };
+
     db.collection('users').doc(auth.user.id).update({
       domains: firebase.firestore.FieldValue.arrayUnion(domain),
     });
+    db.collection('users').doc(auth.user.id).collection('domains').doc(domain).set(
+      domainSpace,
+      { merge: true },
+    );
   };
 
   const PushButton = () => {
