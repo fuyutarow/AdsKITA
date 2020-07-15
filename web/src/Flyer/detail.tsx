@@ -17,6 +17,7 @@ import AppHeader from 'components/AppHeader';
 import AppFooter from 'components/AppFooter';
 import InputImage from './inputImage';
 import InputLinkURL, { isValidURL } from './inputLinkURL';
+import RequestPart from './RequestPart';
 
 export default () => {
   const auth = useContext(AuthContext);
@@ -79,7 +80,7 @@ const NewTicketEditor: React.FC<{ auth: AuthContextProps }> = ({ auth }) => {
     const disabled = (!valid) || clicked;
 
     return disabled
-      ? <Button disabled={disabled} variant='contained'>保存</Button>
+      ? <Button disabled={disabled} variant='contained'>更新</Button>
       : (
         <Button
           variant='contained'
@@ -140,6 +141,10 @@ const NewTicketEditor: React.FC<{ auth: AuthContextProps }> = ({ auth }) => {
               プレビュー
             </Button>
           </div>
+
+          <hr style={{ margin: '20px 0 20px 0' }} />
+
+          <RequestPart flyer={flyer} />
         </Paper>
       </Container>
       <AppFooter />
