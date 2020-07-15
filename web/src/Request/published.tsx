@@ -26,19 +26,20 @@ export default () => {
 
   useEffect(
     () => {
-      db.collection('pubs').doc(pubId).collection('shards').doc('0').update({
+      if (!flyer) return;
+      if (window.parent.location.hostname !== flyer.targetDoamin) return;
+      db.collection('pubs').doc(flyer.id).collection('shards').doc('0').update({
         displayCount: firebase.firestore.FieldValue.increment(1),
       });
     },
-    [pubId],
+    [flyer],
   );
 
   const onClick = () => {
     if (!flyer) return;
 
     // parent.locationで正しいドメインで広告表示されているか判定
-    debug('window', window.location);
-    debug('parent', window.parent.location);
+    if (window.parent.location.hostname !== flyer.targetDoamin) return;
     db.collection('pubs').doc(pubId).collection('shards').doc('0').update({
       clickCount: firebase.firestore.FieldValue.increment(1),
     });
