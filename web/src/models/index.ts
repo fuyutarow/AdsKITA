@@ -21,6 +21,8 @@ export type PublishedFlyer = Flyer & {
   targetDoamin: string;
 }
 
+export type PubRecord = Record<PubId, PublishedFlyer | undefined>
+
 export interface UserInfoCore {
   id: UserId;
   displayName: string | null;

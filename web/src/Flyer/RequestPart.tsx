@@ -48,14 +48,15 @@ const FC: React.FC<{ flyer: Flyer }> = ({ flyer }) => {
       displayCount: 0,
       clickCount: 0,
     });
-    // NOTE
-    // 広告主が広告の情報を取得するのに1広告あたり2回クエリ発行する
-    // クリック数等のカウント情報は刻一刻と変わるのでデータをコピーして/users/:id/pubs/:idで保持するのは難しい
-    // 広告主が広告情報を確認する回数と広告が表示される回数では後者のほうが大きいと考えられる
-    // /users/:id/pubs/:id は /pubs/:id の参照とする
-    db.collection('users').doc(auth.user.id).collection('pubs').doc(pub.pubId).set({
-      ref: db.collection('pubs').doc(pub.pubId),
-    });
+    db.collection('users').doc(auth.user.id).collection('pubs').doc(pub.pubId).set(pub);
+    // // NOTE
+    // // 広告主が広告の情報を取得するのに1広告あたり2回クエリ発行する
+    // // クリック数等のカウント情報は刻一刻と変わるのでデータをコピーして/users/:id/pubs/:idで保持するのは難しい
+    // // 広告主が広告情報を確認する回数と広告が表示される回数では後者のほうが大きいと考えられる
+    // // /users/:id/pubs/:id は /pubs/:id の参照とする
+    // db.collection('users').doc(auth.user.id).collection('pubs').doc(pub.pubId).set({
+    //   ref: db.collection('pubs').doc(pub.pubId),
+    // });
     toastNotice('広告掲載を依頼しました', { color: colors.green[500] });
     history.push(routes.requestDetail.path.replace(':id', pub.pubId));
   };

@@ -6,6 +6,7 @@ import NotFound from 'views/NotFound';
 import NewFlyer from 'Flyer/new';
 import FlyerDetail from 'Flyer/detail';
 import PreviewFlyer from 'Flyer/published';
+import RequestList from 'Request/list';
 import RequestDetail from 'Request/detail';
 import PublishedFlyer from 'Request/published';
 import AppFooter from 'components/AppFooter';
@@ -58,6 +59,10 @@ export const routes = {
   preview: {
     path: '/preview/:id',
     component: PreviewFlyer,
+  },
+  requestList: {
+    path: '/requests',
+    component: RequestList,
   },
   requestDetail: {
     path: '/requests/:id',
