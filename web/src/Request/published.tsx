@@ -28,7 +28,12 @@ export default () => {
   useEffect(
     () => {
       if (!flyer) return;
-      if (window.parent.location.hostname !== flyer.targetDoamin) return;
+
+      const url = (window.location !== window.parent.location)
+        ? document.referrer
+        : document.location.href;
+      console.log('DEBUG', url);
+      // if (window.parent.location.hostname !== flyer.targetDoamin) return;
       db.collection('pubs').doc(flyer.id).collection('shards').doc('0').update({
         displayCount: firebase.firestore.FieldValue.increment(1),
       });
@@ -42,8 +47,8 @@ export default () => {
 
     setClicked(true);
 
-    // parent.locationで正しいドメインで広告表示されているか判定
-    if (window.parent.location.hostname !== flyer.targetDoamin) return;
+    // // parent.locationで正しいドメインで広告表示されているか判定
+    // if (window.parent.location.hostname !== flyer.targetDoamin) return;
 
     // クリック回数カウンタ
     db.collection('pubs').doc(pubId).collection('shards').doc('0').update({
