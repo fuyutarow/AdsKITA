@@ -98,7 +98,6 @@ const NewTicketEditor: React.FC<{ auth: AuthContextProps }> = ({ auth }) => {
       <AppHeader />
       <Container maxWidth="sm" style={{
         padding: 10,
-
       }}>
         <Paper style={{
           padding: 20,
@@ -129,6 +128,7 @@ const NewTicketEditor: React.FC<{ auth: AuthContextProps }> = ({ auth }) => {
             <SaveButton />
             <span style={{ padding: '0 5px 0 5px' }} ></span>
             <Button color='primary' variant='contained'
+              style={{ margin: '10px 0 10px 0' }}
               onClick={e => {
                 history.push(routes.pubs.path.replace(':id', flyerId));
               }}

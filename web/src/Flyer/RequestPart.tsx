@@ -65,7 +65,7 @@ const FC: React.FC<{ flyer: Flyer }> = ({ flyer }) => {
           setLinkURL: setDomainURL,
         }} />
       </div>
-      <div>掲載依頼するドメイン: {hostname}</div>
+      <div>掲載依頼するドメイン: <a href={`//${hostname}`} target="_blank">{hostname}</a></div>
       <div>
         <RequestButton />
       </div>
