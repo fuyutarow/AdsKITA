@@ -1,6 +1,11 @@
 import isURL from 'is-url';
 import React, { useState, useEffect, useContext, useCallback } from 'react';
+
+import Button from '@material-ui/core/Button';
+import { colors } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
+
+import { getHostname } from 'utils';
 
 export const isValidURL = (linkURL: string): boolean => {
   return linkURL === '' || isURL(linkURL);
@@ -34,6 +39,33 @@ const InputDomain: React.FC<{
   // }> = ({ linkURL, setLinkURL }) => {
 }> = () => {
   const [domainURL, setDomainURL] = useState<string>('');
+  const valid = isValidURL(domainURL) && domainURL !== '';
+
+  const pushDomain = () => {
+    const hostname = getHostname(domainURL);
+
+    alert(hostname);
+  };
+
+  const PushButton = () => {
+    const [clicked, setClicked] = useState(false);
+
+    const disabled = (!valid) || clicked;
+
+    const message = '追加';
+    const style = { margin: '10px 0 10px 0' };
+    const onClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+      setClicked(true);
+      pushDomain();
+    };
+    return disabled
+      ? <Button disabled={disabled} variant='contained' style={{ ...style }}>{message}</Button>
+      : <Button variant='contained' onClick={onClick} style={{
+        ...style,
+        color: 'white',
+        backgroundColor: colors.green[500],
+      }}>{message}</Button>;
+  };
 
   return (
     <div style={{ padding: 20 }}>
@@ -42,6 +74,7 @@ const InputDomain: React.FC<{
         linkURL: domainURL,
         setLinkURL: setDomainURL,
       }} />
+      <PushButton />
     </div>
   );
 

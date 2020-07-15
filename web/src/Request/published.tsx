@@ -5,15 +5,7 @@ import firebase from 'firebase';
 import { db } from 'plugins/firebase';
 import { routes } from 'router';
 import { PublishedFlyer } from 'models';
-
-const getHostname = (href: string): string | null => {
-  try {
-    const url = new URL(href);
-    return url.hostname;
-  } catch (e) {
-    return null;
-  }
-};
+import { getHostname } from 'utils';
 
 export default () => {
   const history = useHistory();
