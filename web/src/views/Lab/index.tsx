@@ -1,11 +1,14 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import ImageUploader from 'react-images-upload';
 
 import { debug, sampleBase64 } from 'plugins/debug';
 import { Base64 } from 'js-base64';
 
 import { useDropzone } from 'react-dropzone';
+import { routes } from 'router';
+import { db } from 'plugins/firebase';
+import { PublishedFlyer } from 'models';
 
 const MyDropzone = () => {
   const onDrop = useCallback((acceptedFiles: Array<File>) => {
@@ -78,15 +81,75 @@ const App = () => {
 
 export default () => {
 
+  const history = useHistory();
+  const [flyer, setFlyer] = useState<PublishedFlyer | null>(null);
+  useEffect(
+    () => {
+      const pubId = '1d48c11c-f786-4bb0-a50f-32b0df68e4f0';
+      const listener = db.collection('pubs').doc(pubId)
+        .onSnapshot(doc => {
+          const pubed = doc.data() as PublishedFlyer || null;
+          setFlyer(pubed);
+        });
+      return () => listener();
+    },
+    [],
+  );
+  const IMG = () => flyer
+    ? (
+      <img {...{
+        width: 300,
+        height: 250,
+        src: flyer.imageURL,
+      }} />
+    )
+    : null;
+
   return (
     <>
+      <button onClick={() => {
+        history.push({
+          pathname: routes.redirect.path,
+          state: {
+            toURL: 'https://note.com/matching_ryman/n/n1c851332f935',
+          },
+        });
+      }}>redirect</button>
+      <button onClick={() => {
+        history.push('/lab/link');
+      }}>to link</button>
+      <div onClick={e => {
+        const href = flyer?.linkURL || null;
+        if (href) {
+          history.push({
+            pathname: routes.redirect.path,
+            state: {
+              toURL: href,
+            },
+          });
+        }
+      }}>
+        <IMG />
+      </div>
+      <div>innerB</div>
+      <iframe
+        {...{
+          title: 'fmfm',
+          width: 300,
+          height: 250,
+          src: 'https://adskita-git-cors.fuyutarow.vercel.app/pubs/1d48c11c-f786-4bb0-a50f-32b0df68e4f0',
+        }}
+        style={{
+          borderWidth: 0,
+        }}
+      />
       <div>inner</div>
       <iframe
         {...{
           title: 'fmfm',
           width: 300,
           height: 250,
-          src: '/pubs/1d1184ca-c883-4070-959c-f876e797a850',
+          src: '/pubs/1d48c11c-f786-4bb0-a50f-32b0df68e4f0',
         }}
         style={{
           borderWidth: 0,

@@ -1,16 +1,26 @@
-import React, { useState, useEffect, useContext, useCallback } from 'react';
-import { Link, useParams, useHistory } from 'react-router-dom';
-
+import React, { useState, useEffect, useCallback } from 'react';
+import { useParams, useHistory } from 'react-router-dom';
 import firebase from 'firebase';
+
 import { db } from 'plugins/firebase';
-import { debug } from 'plugins/debug';
-import { isDevelopment } from 'plugins/env';
+import { routes } from 'router';
 import { PublishedFlyer } from 'models';
 
+const getHostname = (href: string): string | null => {
+  try {
+    const url = new URL(href);
+    return url.hostname;
+  } catch (e) {
+    return null;
+  }
+};
+
 export default () => {
+  const history = useHistory();
   const { id: pubId } = useParams();
   const [flyer, setFlyer] = useState<PublishedFlyer | null>(null);
   const [clicked, setClicked] = useState(false);
+  const [hostname, setHostname] = useState<string | null>(null);
 
   useEffect(
     () => {
@@ -24,10 +34,20 @@ export default () => {
     [pubId],
   );
 
+  // 表示回数カウンタ
   useEffect(
     () => {
       if (!flyer) return;
-      if (window.parent.location.hostname !== flyer.targetDoamin) return;
+
+      // CORSを回避して親ウィンドウのロケーションを取得する方法
+      const hereHref = (window.location !== window.parent.location)
+        ? document.referrer
+        : document.location.href;
+      const hereHostname = getHostname(hereHref);
+      setHostname(hereHostname);
+
+      if (hereHostname && hereHostname !== flyer.targetDoamin) return;
+
       db.collection('pubs').doc(flyer.id).collection('shards').doc('0').update({
         displayCount: firebase.firestore.FieldValue.increment(1),
       });
@@ -37,37 +57,39 @@ export default () => {
 
   const onClick = () => {
     if (!flyer) return;
+    if (clicked) return;
 
-    // parent.locationで正しいドメインで広告表示されているか判定
-    if (window.parent.location.hostname !== flyer.targetDoamin) return;
-    db.collection('pubs').doc(pubId).collection('shards').doc('0').update({
-      clickCount: firebase.firestore.FieldValue.increment(1),
-    });
-    const href = clicked ? undefined : flyer.linkURL;
-    debug(href);
     setClicked(true);
+
+    if (hostname && hostname === flyer.targetDoamin) {
+      // クリック回数カウンタ
+      db.collection('pubs').doc(pubId).collection('shards').doc('0').update({
+        clickCount: firebase.firestore.FieldValue.increment(1),
+      });
+    }
+
+    const toHref = flyer?.linkURL || null;
+    if (toHref) {
+      history.push({
+        pathname: routes.redirect.path,
+        state: { toURL: toHref },
+      });
+    }
   };
 
-  if (!flyer) return null;
+  const IMG = () => flyer
+    ? (
+      <img {...{
+        width: 300,
+        height: 250,
+        src: flyer.imageURL,
+      }} />
+    )
+    : null;
 
-  const IMG = () => (
-    <img {...{
-      width: 300,
-      height: 250,
-      src: flyer.imageURL,
-    }} />
+  return (
+    <div onClick={onClick}>
+      <IMG />
+    </div>
   );
-
-  return clicked
-    ? <IMG />
-    : (
-      <div>
-        {isDevelopment &&
-          <button onClick={onClick}>dbg</button>
-        }
-        <a href={flyer.linkURL} onClick={onClick}>
-          <IMG />
-        </a>
-      </div >
-    );
 };
