@@ -7,7 +7,7 @@ import { colors } from '@material-ui/core';
 import { db } from 'plugins/firebase';
 import { toastNotice } from 'plugins/toast';
 import { routes } from 'router';
-import { Flyer, PublishedFlyer } from 'models';
+import { Flyer, PublishedFlyer, Timestamp } from 'models';
 import { AuthContext } from 'contexts/auth';
 import InputLinkURL, { isValidURL } from './inputLinkURL';
 
@@ -42,6 +42,7 @@ const FC: React.FC<{ flyer: Flyer }> = ({ flyer }) => {
       pubId: uuid(),
       numShards: 1,
       targetDoamin: hostname,
+      createdAt: Timestamp.now(),
     };
     db.collection('pubs').doc(pub.pubId).set(pub);
     db.collection('pubs').doc(pub.pubId).collection('shards').doc('0').set({
@@ -97,9 +98,7 @@ const FC: React.FC<{ flyer: Flyer }> = ({ flyer }) => {
         <RequestButton />
       </div>
     </div>
-
   );
-
 };
 
 export default FC;
