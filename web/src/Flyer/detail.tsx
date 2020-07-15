@@ -82,7 +82,8 @@ const NewTicketEditor: React.FC<{ auth: AuthContextProps }> = ({ auth }) => {
     const message = '更新';
     const style = { margin: '10px 0 10px 0' };
     const onClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-      alert('ok');
+      setClicked(true);
+      onSave();
     };
     return disabled
       ? <Button disabled={disabled} variant='contained' style={{ ...style }}>{message}</Button>

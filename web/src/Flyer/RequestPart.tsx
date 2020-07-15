@@ -1,14 +1,17 @@
 import { v4 as uuid } from 'uuid';
 import React, { useState, useEffect, useContext, useCallback } from 'react';
+import { Link, useParams, useHistory } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import { colors } from '@material-ui/core';
 
 import { db } from 'plugins/firebase';
 import { toastNotice } from 'plugins/toast';
+import { routes } from 'router';
 import { Flyer, PublishedFlyer } from 'models';
 import InputLinkURL, { isValidURL } from './inputLinkURL';
 
 const FC: React.FC<{ flyer: Flyer }> = ({ flyer }) => {
+  const history = useHistory();
   const [hostname, setHostname] = useState('');
   const [domainURL, setDomainURL] = useState<string>('');
   const valid = isValidURL(domainURL) && domainURL !== '';
@@ -50,6 +53,7 @@ const FC: React.FC<{ flyer: Flyer }> = ({ flyer }) => {
         clickCount: 0,
       });
       toastNotice('広告掲載を依頼しました', { color: colors.green[500] });
+      history.push(routes.requestDetail.path.replace(':id', pub.pubId));
     };
     return disabled
       ? <Button disabled={disabled} variant='contained' style={{ ...style }}>{message}</Button>
