@@ -9,7 +9,7 @@ export default () => {
     () => {
       if (location.state) {
         // @ts-ignore
-        window.location.href = location.state.toURL;
+        window.parent.location.href = location.state.toURL;
       }
     },
     [location.state],
