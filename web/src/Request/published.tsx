@@ -58,20 +58,19 @@ export default () => {
     }
   };
 
-  const IMG: React.FC<{ flyer: PublishedFlyer }> = ({ flyer }) =>
-    (
+  const IMG = () => flyer
+    ? (
       <img {...{
         width: 300,
         height: 250,
         src: flyer.imageURL,
       }} />
-    );
-
-  return flyer
-    ? (
-      <div onClick={onClick}>
-        <IMG flyer={flyer} />
-      </div>
     )
     : null;
+
+  return (
+    <div onClick={onClick}>
+      <IMG />
+    </div>
+  );
 };
