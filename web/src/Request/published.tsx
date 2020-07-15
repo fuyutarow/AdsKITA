@@ -1,21 +1,15 @@
-import React, { useState, useEffect, useContext, useCallback } from 'react';
-import { Link, useParams, useHistory } from 'react-router-dom';
-
-import firebase from 'firebase';
-import { db } from 'plugins/firebase';
-import { debug } from 'plugins/debug';
-import { isDevelopment } from 'plugins/env';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useParams, useHistory } from 'react-router-dom';
 import { routes } from 'router';
+import { db } from 'plugins/firebase';
 import { PublishedFlyer } from 'models';
 
 export default () => {
   const history = useHistory();
-  const { id: pubId } = useParams();
   const [flyer, setFlyer] = useState<PublishedFlyer | null>(null);
-  const [clicked, setClicked] = useState(false);
-
   useEffect(
     () => {
+      const pubId = '1d48c11c-f786-4bb0-a50f-32b0df68e4f0';
       const listener = db.collection('pubs').doc(pubId)
         .onSnapshot(doc => {
           const pubed = doc.data() as PublishedFlyer || null;
@@ -23,62 +17,44 @@ export default () => {
         });
       return () => listener();
     },
-    [pubId],
+    [],
   );
+  const IMG = () => flyer
+    ? (
+      <img {...{
+        width: 300,
+        height: 250,
+        src: flyer.imageURL,
+      }} />
+    )
+    : null;
 
-  useEffect(
-    () => {
-      if (!flyer) return;
-      if (window.parent.location.hostname !== flyer.targetDoamin) return;
-      db.collection('pubs').doc(flyer.id).collection('shards').doc('0').update({
-        displayCount: firebase.firestore.FieldValue.increment(1),
-      });
-    },
-    [flyer],
-  );
-
-  const onClick = () => {
-    if (!flyer) return;
-
-    setClicked(true);
-
-    // parent.locationで正しいドメインで広告表示されているか判定
-    if (window.parent.location.hostname !== flyer.targetDoamin) return;
-
-    db.collection('pubs').doc(pubId).collection('shards').doc('0').update({
-      clickCount: firebase.firestore.FieldValue.increment(1),
-    });
-    const href = clicked ? undefined : flyer.linkURL;
-    if (href) {
-      history.push({
-        pathname: routes.redirect.path,
-        state: {
-          toURL: href,
-        },
-      });
-    }
-  };
-
-  if (!flyer) return null;
-
-  const IMG = () => (
-    <img {...{
-      width: 300,
-      height: 250,
-      src: flyer.imageURL,
-    }} />
-  );
-
-  return clicked
-    ? <IMG />
-    : (
-      <div>
-        {isDevelopment &&
-            <button onClick={onClick}>dbg</button>
+  return (
+    <>
+      <button onClick={() => {
+        history.push({
+          pathname: routes.redirect.path,
+          state: {
+            toURL: 'https://note.com/matching_ryman/n/n1c851332f935',
+          },
+        });
+      }}>redirect</button>
+      <button onClick={() => {
+        history.push('/lab/link');
+      }}>to link</button>
+      <div onClick={e => {
+        const href = flyer?.linkURL || null;
+        if (href) {
+          history.push({
+            pathname: routes.redirect.path,
+            state: {
+              toURL: href,
+            },
+          });
         }
-        <div onClick={onClick}>
-          <IMG />
-        </div>
-      </div >
-    );
+      }}>
+        <IMG />
+      </div>
+    </>
+  );
 };
