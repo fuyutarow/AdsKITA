@@ -32,6 +32,7 @@ export interface UserInfoCore {
 export type UserInfo = UserInfoCore & {
   createdAt: Timestamp;
   updatedAt: Timestamp;
+  domains: Array<string>;
 }
 
 export enum TicketStatus {

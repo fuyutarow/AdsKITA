@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 
+import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardContent from '@material-ui/core/CardContent';
@@ -32,7 +33,7 @@ export default () => {
     );
 };
 
-const AdTile: React.FC<{ flyer: PublishedFlyer }> = ({ flyer }) => {
+const DomainView: React.FC<{ hostname: string }> = ({ hostname }) => {
   const history = useHistory();
   const breakpoint = 'L';
 
@@ -48,7 +49,7 @@ const AdTile: React.FC<{ flyer: PublishedFlyer }> = ({ flyer }) => {
     return ['L', 'M'].includes(breakpoint)
       ? {
         width: 200,
-        height: 200 * 1.6,
+        height: 200 * 0.625,
         borderRadius: '20px',
       }
       : {
@@ -61,66 +62,54 @@ const AdTile: React.FC<{ flyer: PublishedFlyer }> = ({ flyer }) => {
   };
 
   return (
-    <div style={cardPadding(breakpoint)}>
-      <Card style={cardStyle(breakpoint)}>
-        <CardActionArea onClick={e => {
-          history.push({
-            pathname: routes.requestDetail.path
-              .replace(':id', flyer.pubId),
-          });
+    <Card style={cardStyle(breakpoint)}>
+      <CardActionArea onClick={e => {
+        // history.push({
+        //   pathname: routes.requestDetail.path
+        //     .replace(':id', flyer.pubId),
+        // });
+      }}>
+        <div style={{
+          ...cardStyle(breakpoint),
+          position: 'relative',
+
         }}>
-          <div style={cardStyle(breakpoint)}>
-            <CardMedia
-              component="img"
-              height="140"
-              image={flyer.imageURL}
-            />
-            <CardContent style={{ height: '100%' }}>
-              <div>id: {head7(flyer.id)}</div>
-              {flyer.linkURL
-                ? <div>リンクURL: <a href={flyer.linkURL} target="_blank">{flyer.linkURL}</a></div>
-                : <div>リンクURL: なし </div>
-              }
-              <div>対象ドメイン: <a href={`//${flyer.targetDoamin}`} target="_blank">{flyer.targetDoamin}</a></div>
-            </CardContent>
-          </div>
-        </CardActionArea >
-      </Card>
-    </div>
+          <CardContent style={{ height: '100%' }}>
+            <div style={{
+              display: 'grid',
+              placeItems: 'center',
+              // position: 'absolute',
+              // top: '50%',
+              // left: '50%',
+              // transform: 'translateY(-50%) translateX(-50%)',
+              transform: 'translateY(20%)',
+              // width: '80%',
+            }}>
+              <div style={{
+                fontSize: 18,
+              }}>
+                <a href={`//${hostname}`} target="_blank">{hostname}</a>
+              </div>
+              <Button>
+                広告依頼をみる
+              </Button>
+            </div>
+          </CardContent>
+        </div>
+      </CardActionArea >
+    </Card >
   );
 };
 
 const Main: React.FC<{ auth: AuthContextProps }> = ({ auth }) => {
   const [pubRecord, setPubRecord] = useState<PubRecord>({});
   const [first, setFirst] = useState(true);
-
-  useEffect(
-    () => {
-      const listener = db.collection('users').doc(auth.user.id).collection('pubs')
-        .onSnapshot(querySnapshot => {
-          const pubList: Array<PublishedFlyer> = querySnapshot.docs.map(doc => {
-            return doc.data() as PublishedFlyer;
-          });
-          pubList.forEach(pub => {
-            pubRecord[pub.pubId] = pub;
-          });
-          setPubRecord(pubRecord);
-
-          // 再描画を誘う
-          setFirst(false);
-        });
-      return () => listener();
-    },
-    [auth.user.id, pubRecord],
-  );
+  const domains = auth.user.domains;
 
   const PubTable = () => {
     return (
       <>
-        {Object.values(pubRecord)
-          .filter((x): x is PublishedFlyer => Boolean(x))
-          .map(pub => <AdTile flyer={pub} />)
-        }
+        {domains.map(domain => <DomainView hostname={domain} />)}
       </>
     );
   };
@@ -129,12 +118,8 @@ const Main: React.FC<{ auth: AuthContextProps }> = ({ auth }) => {
     <div>
       <InputDomain />
       <DebugButton onClick={e => {
-        debug(pubRecord);
-        const ll = Object.values(pubRecord)
-          .filter((x): x is PublishedFlyer => Boolean(x));
-        debug(ll);
+        debug(domains);
       }} />
-      <div>{Object.keys(pubRecord).length}</div>
       <PubTable />
     </div>
   );

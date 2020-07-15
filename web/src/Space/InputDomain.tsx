@@ -1,10 +1,13 @@
 import isURL from 'is-url';
+import firebase from 'firebase';
 import React, { useState, useEffect, useContext, useCallback } from 'react';
 
 import Button from '@material-ui/core/Button';
 import { colors } from '@material-ui/core';
 import TextField from '@material-ui/core/TextField';
 
+import { db } from 'plugins/firebase';
+import { AuthContext } from 'contexts/auth';
 import { getHostname } from 'utils';
 
 export const isValidURL = (linkURL: string): boolean => {
@@ -40,11 +43,16 @@ const InputDomain: React.FC<{
 }> = () => {
   const [domainURL, setDomainURL] = useState<string>('');
   const valid = isValidURL(domainURL) && domainURL !== '';
+  const auth = useContext(AuthContext);
 
   const pushDomain = () => {
-    const hostname = getHostname(domainURL);
+    if (!auth) return;
+    const domain = getHostname(domainURL);
 
-    alert(hostname);
+    // IDEA: ☆つけたらcollection('spaces')に追加してあげよう
+    db.collection('users').doc(auth.user.id).update({
+      domains: firebase.firestore.FieldValue.arrayUnion(domain),
+    });
   };
 
   const PushButton = () => {

@@ -62,6 +62,7 @@ const AuthProvider = ({ children }: any) => {
               photoURL: userInfo.photoURL || firebaseCurrentUser.photoURL || null,
               createdAt: userInfo.createdAt || Timestamp.now(),
               updatedAt: userInfo.updatedAt || Timestamp.now(),
+              domains: userInfo.domains || [],
             });
           } else {
             // 初見さんいらっしゃい
@@ -74,6 +75,7 @@ const AuthProvider = ({ children }: any) => {
               photoURL: firebaseCurrentUser.photoURL || null,
               createdAt: Timestamp.now(),
               updatedAt: Timestamp.now(),
+              domains: [],
             };
             db.collection('users').doc(user.id).set(user);
 
