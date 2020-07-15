@@ -61,17 +61,18 @@ export default () => {
 
     setClicked(true);
 
-    if (hostname && hostname !== flyer.targetDoamin) return;
+    if (hostname && hostname === flyer.targetDoamin) {
+      // クリック回数カウンタ
+      db.collection('pubs').doc(pubId).collection('shards').doc('0').update({
+        clickCount: firebase.firestore.FieldValue.increment(1),
+      });
+    }
 
-    // クリック回数カウンタ
-    db.collection('pubs').doc(pubId).collection('shards').doc('0').update({
-      clickCount: firebase.firestore.FieldValue.increment(1),
-    });
-    const href = flyer?.linkURL || null;
-    if (href) {
+    const toHref = flyer?.linkURL || null;
+    if (toHref) {
       history.push({
         pathname: routes.redirect.path,
-        state: { toURL: href },
+        state: { toURL: toHref },
       });
     }
   };
