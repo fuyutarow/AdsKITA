@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import ImageUploader from 'react-images-upload';
 
 import { debug, sampleBase64 } from 'plugins/debug';
@@ -78,8 +78,12 @@ const App = () => {
 
 export default () => {
 
+  const history = useHistory();
   return (
     <>
+      <button onClick={() => {
+        history.push('/lab/link');
+      }}>to link</button>
       <div>inner</div>
       <iframe
         {...{
