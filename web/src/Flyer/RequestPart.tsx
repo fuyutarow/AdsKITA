@@ -45,6 +45,10 @@ const FC: React.FC<{ flyer: Flyer }> = ({ flyer }) => {
         targetDoamin: hostname,
       };
       db.collection('pubs').doc(pub.pubId).set(pub);
+      db.collection('pubs').doc(pub.pubId).collection('shards').doc('0').set({
+        displayCount: 0,
+        clickCount: 0,
+      });
       toastNotice('広告掲載を依頼しました', { color: colors.green[500] });
     };
     return disabled
