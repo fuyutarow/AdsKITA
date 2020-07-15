@@ -6,19 +6,39 @@ import { Flyer } from 'models';
 import InputLinkURL, { isValidURL } from './inputLinkURL';
 
 const FC: React.FC<{ flyer: Flyer }> = ({ flyer }) => {
-  const [domain, setDomain] = useState<string>('');
-  const valid = isValidURL(domain) && domain !== '';
+  const [hostname, setHostname] = useState('');
+  const [domainURL, setDomainURL] = useState<string>('');
+  const valid = isValidURL(domainURL) && domainURL !== '';
+
+  useEffect(
+    () => {
+      try {
+        const url = new URL(domainURL);
+        setHostname(url.hostname);
+      } catch (e) {
+        // try {
+        //   const url = new URL(`https://${domainURL}`);
+        //   setHostname(url.hostname);
+        // } catch (e) {
+        //   setHostname(null);
+        // }
+      }
+    },
+    [domainURL],
+  );
 
   const RequestButton = () => {
     const [clicked, setClicked] = useState(false);
     const disabled = (!valid) || clicked;
 
+    const style = { margin: '10px 0 10px 0' };
     return disabled
-      ? <Button disabled={disabled} variant='contained'>依頼</Button>
+      ? <Button disabled={disabled} variant='contained' style={{ ...style }}>依頼</Button>
       : (
         <Button
           variant='contained'
           style={{
+            ...style,
             color: 'white',
             backgroundColor: colors.green[500],
           }}
@@ -36,10 +56,11 @@ const FC: React.FC<{ flyer: Flyer }> = ({ flyer }) => {
       <div> このドメインに広告を掲載依頼する </div>
       <div>
         <InputLinkURL {...{
-          linkURL: domain,
-          setLinkURL: setDomain,
+          linkURL: domainURL,
+          setLinkURL: setDomainURL,
         }} />
       </div>
+      <div>掲載依頼するドメイン: {hostname}</div>
       <div>
         <RequestButton />
       </div>
