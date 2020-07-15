@@ -55,10 +55,10 @@ const AuthAvator: React.FC = () => {
           onClick={handleMenu}
         >
           {
-            auth.currentUser.photoURL
+            auth.user.photoURL
               ? (
                 <Avatar
-                  src={auth.currentUser.photoURL}
+                  src={auth.user.photoURL}
                   onClick={handleMenu}
                 />
               )

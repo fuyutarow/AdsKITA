@@ -21,11 +21,14 @@ export type PublishedFlyer = Flyer & {
   targetDoamin: string;
 }
 
-export interface UserInfo {
+export interface UserInfoCore {
   id: UserId;
   displayName: string | null;
   photoURL: string | null;
-  providerId: string;
+}
+
+export type UserInfo = UserInfoCore & {
+  createdAt: Timestamp;
   updatedAt: Timestamp;
 }
 

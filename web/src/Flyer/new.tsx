@@ -34,7 +34,7 @@ export default () => {
 
 const NewTicketEditor: React.FC<{ auth: AuthContextProps }> = ({ auth }) => {
   const history = useHistory();
-  const currentUser = auth.currentUser;
+  const currentUser = auth.user;
 
   const flyerId = uuid();
   const [imageURL, setImageURL] = useState<string | null>(null);
