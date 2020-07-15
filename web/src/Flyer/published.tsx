@@ -24,8 +24,19 @@ export default () => {
     [flyerId],
   );
 
+  useEffect(
+    () => {
+      db.collection('flyers').doc(flyerId).collection('shards').doc('0').update({
+        displayCount: firebase.firestore.FieldValue.increment(1),
+      });
+    },
+    [flyerId],
+  );
+
   const onClick = () => {
     if (!flyer) return;
+
+    // parent.locationで正しいドメインで広告表示されているか判定
     debug('window', window.location);
     debug('parent', window.parent.location);
     db.collection('flyers').doc(flyerId).collection('shards').doc('0').update({
@@ -53,7 +64,6 @@ export default () => {
         {isDevelopment &&
           <button onClick={onClick}>dbg</button>
         }
-
         <a href={flyer.linkURL} onClick={onClick}>
           <IMG />
         </a>
