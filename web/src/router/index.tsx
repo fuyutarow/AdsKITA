@@ -7,7 +7,9 @@ import About from 'views/About';
 import NotFound from 'views/NotFound';
 import NewFlyer from 'Flyer/new';
 import FlyerDetail from 'Flyer/detail';
-import PublishedFlyer from 'Flyer/published';
+import PreviewFlyer from 'Flyer/published';
+import RequestDetail from 'Request/detail';
+import PublishedFlyer from 'Request/published';
 import PurchasedTicketList from 'views/PurchasedTicketList';
 import ProductHeroLayout from 'views/ProductHeroLayout';
 import AppFooter from 'components/AppFooter';
@@ -53,6 +55,14 @@ export const routes = {
   pubs: {
     path: '/pubs/:id',
     component: PublishedFlyer,
+  },
+  preview: {
+    path: '/preview/:id',
+    component: PreviewFlyer,
+  },
+  requestDetail: {
+    path: '/requests/:id',
+    component: RequestDetail,
   },
   about: {
     path: '/about',

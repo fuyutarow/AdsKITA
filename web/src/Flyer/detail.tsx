@@ -17,6 +17,7 @@ import AppHeader from 'components/AppHeader';
 import AppFooter from 'components/AppFooter';
 import InputImage from './inputImage';
 import InputLinkURL, { isValidURL } from './inputLinkURL';
+import RequestPart from './RequestPart';
 
 export default () => {
   const auth = useContext(AuthContext);
@@ -78,23 +79,19 @@ const NewTicketEditor: React.FC<{ auth: AuthContextProps }> = ({ auth }) => {
     const [clicked, setClicked] = useState(false);
     const disabled = (!valid) || clicked;
 
+    const message = '更新';
+    const style = { margin: '10px 0 10px 0' };
+    const onClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+      setClicked(true);
+      onSave();
+    };
     return disabled
-      ? <Button disabled={disabled} variant='contained'>保存</Button>
-      : (
-        <Button
-          variant='contained'
-          style={{
-            color: 'white',
-            backgroundColor: colors.green[500],
-          }}
-          onClick={e => {
-            setClicked(true);
-            onSave();
-          }}
-        >
-          更新
-        </Button>
-      );
+      ? <Button disabled={disabled} variant='contained' style={{ ...style }}>{message}</Button>
+      : <Button variant='contained' onClick={onClick} style={{
+        ...style,
+        color: 'white',
+        backgroundColor: colors.green[500],
+      }}>{message}</Button>;
   };
 
   return (
@@ -102,7 +99,6 @@ const NewTicketEditor: React.FC<{ auth: AuthContextProps }> = ({ auth }) => {
       <AppHeader />
       <Container maxWidth="sm" style={{
         padding: 10,
-
       }}>
         <Paper style={{
           padding: 20,
@@ -133,6 +129,7 @@ const NewTicketEditor: React.FC<{ auth: AuthContextProps }> = ({ auth }) => {
             <SaveButton />
             <span style={{ padding: '0 5px 0 5px' }} ></span>
             <Button color='primary' variant='contained'
+              style={{ margin: '10px 0 10px 0' }}
               onClick={e => {
                 history.push(routes.pubs.path.replace(':id', flyerId));
               }}
@@ -140,6 +137,10 @@ const NewTicketEditor: React.FC<{ auth: AuthContextProps }> = ({ auth }) => {
               プレビュー
             </Button>
           </div>
+
+          <hr style={{ margin: '10px 0 20px 0' }} />
+
+          <RequestPart flyer={flyer} />
         </Paper>
       </Container>
       <AppFooter />
