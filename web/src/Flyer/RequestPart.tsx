@@ -57,8 +57,10 @@ const FC: React.FC<{ flyer: Flyer }> = ({ flyer }) => {
     // db.collection('users').doc(auth.user.id).collection('pubs').doc(pub.pubId).set({
     //   ref: db.collection('pubs').doc(pub.pubId),
     // });
-    toastNotice('広告掲載を依頼しました', { color: colors.green[500] });
     history.push(routes.requestDetail.path.replace(':id', pub.pubId));
+    db.collection('domains').doc(pub.targetDoamin).collection('pubs').doc(pub.pubId).set(pub);
+
+    toastNotice('広告掲載を依頼しました', { color: colors.green[500] });
   };
 
   const RequestButton = () => {
