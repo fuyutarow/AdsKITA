@@ -33,3 +33,12 @@ export const debugToast = (
     )
     : null;
 };
+
+export const DebugButton: React.FC<{
+  onClick?: ((event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void) | undefined;
+  value?: string | undefined;
+}> = ({ onClick, value }) => {
+  return isDevelopment || isStaging
+    ? <button onClick={onClick}>{value ? value : 'debug'}</button>
+    : null;
+};
