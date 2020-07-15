@@ -6,6 +6,7 @@ import { debug, sampleBase64 } from 'plugins/debug';
 import { Base64 } from 'js-base64';
 
 import { useDropzone } from 'react-dropzone';
+import { routes } from 'router';
 
 const MyDropzone = () => {
   const onDrop = useCallback((acceptedFiles: Array<File>) => {
@@ -81,6 +82,14 @@ export default () => {
   const history = useHistory();
   return (
     <>
+      <button onClick={() => {
+        history.push({
+          pathname: routes.redirect.path,
+          state: {
+            toURL: 'https://note.com/matching_ryman/n/n1c851332f935',
+          },
+        });
+      }}>redirect</button>
       <button onClick={() => {
         history.push('/lab/link');
       }}>to link</button>

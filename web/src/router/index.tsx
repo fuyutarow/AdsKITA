@@ -15,6 +15,7 @@ import ProductHeroLayout from 'views/ProductHeroLayout';
 import AppFooter from 'components/AppFooter';
 import Lab from 'views/Lab';
 import LabLink from 'views/Lab/link';
+import Redirect from 'redirect';
 
 import LoginView from 'views/LoginView'; import Logout from 'components/Logout';
 import AppHeader from 'components/AppHeader';
@@ -58,6 +59,10 @@ export const routes = {
   pubs: {
     path: '/pubs/:id',
     component: PublishedFlyer,
+  },
+  redirect: {
+    path: '/redirect',
+    component: Redirect,
   },
   preview: {
     path: '/preview/:id',
