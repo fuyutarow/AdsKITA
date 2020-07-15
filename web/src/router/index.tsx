@@ -53,6 +53,7 @@ export const routes = {
     component: PublishedFlyer,
   },
   redirect: {
+    exact: true,
     path: '/redirect',
     component: Redirect,
   },
@@ -61,6 +62,7 @@ export const routes = {
     component: PreviewFlyer,
   },
   requestList: {
+    exact: true,
     path: '/requests',
     component: RequestList,
   },
