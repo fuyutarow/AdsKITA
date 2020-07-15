@@ -14,6 +14,13 @@ export interface Flyer {
   ownerId: UserId;
 }
 
+export type PubId = string
+export type PublishedFlyer = Flyer & {
+  pubId: PubId;
+  numShards: number;
+  targetDoamin: string;
+}
+
 export interface UserInfo {
   id: UserId;
   displayName: string | null;

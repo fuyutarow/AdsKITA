@@ -1,8 +1,11 @@
+import { v4 as uuid } from 'uuid';
 import React, { useState, useEffect, useContext, useCallback } from 'react';
 import Button from '@material-ui/core/Button';
 import { colors } from '@material-ui/core';
 
-import { Flyer } from 'models';
+import { db } from 'plugins/firebase';
+import { toastNotice } from 'plugins/toast';
+import { Flyer, PublishedFlyer } from 'models';
 import InputLinkURL, { isValidURL } from './inputLinkURL';
 
 const FC: React.FC<{ flyer: Flyer }> = ({ flyer }) => {
@@ -34,7 +37,15 @@ const FC: React.FC<{ flyer: Flyer }> = ({ flyer }) => {
     const message = '依頼';
     const style = { margin: '10px 0 10px 0' };
     const onClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-      alert('ok');
+      setClicked(true);
+      const pub: PublishedFlyer = {
+        ...flyer,
+        pubId: uuid(),
+        numShards: 1,
+        targetDoamin: hostname,
+      };
+      db.collection('pubs').doc(pub.pubId).set(pub);
+      toastNotice('広告掲載を依頼しました', { color: colors.green[500] });
     };
     return disabled
       ? <Button disabled={disabled} variant='contained' style={{ ...style }}>{message}</Button>
