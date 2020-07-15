@@ -6,11 +6,21 @@ import { db } from 'plugins/firebase';
 import { routes } from 'router';
 import { PublishedFlyer } from 'models';
 
+const getHostname = (href: string): string | null => {
+  try {
+    const url = new URL(href);
+    return url.hostname;
+  } catch (e) {
+    return null;
+  }
+};
+
 export default () => {
   const history = useHistory();
   const { id: pubId } = useParams();
   const [flyer, setFlyer] = useState<PublishedFlyer | null>(null);
   const [clicked, setClicked] = useState(false);
+  const [hostname, setHostname] = useState<string | null>(null);
 
   useEffect(
     () => {
@@ -29,11 +39,15 @@ export default () => {
     () => {
       if (!flyer) return;
 
-      const url = (window.location !== window.parent.location)
+      // CORSを回避して親ウィンドウのロケーションを取得する方法
+      const hereHref = (window.location !== window.parent.location)
         ? document.referrer
         : document.location.href;
-      console.log('DEBUG', url);
-      // if (window.parent.location.hostname !== flyer.targetDoamin) return;
+      const hereHostname = getHostname(hereHref);
+      setHostname(hereHostname);
+
+      if (hereHostname && hereHostname !== flyer.targetDoamin) return;
+
       db.collection('pubs').doc(flyer.id).collection('shards').doc('0').update({
         displayCount: firebase.firestore.FieldValue.increment(1),
       });
@@ -47,8 +61,7 @@ export default () => {
 
     setClicked(true);
 
-    // // parent.locationで正しいドメインで広告表示されているか判定
-    // if (window.parent.location.hostname !== flyer.targetDoamin) return;
+    if (hostname && hostname !== flyer.targetDoamin) return;
 
     // クリック回数カウンタ
     db.collection('pubs').doc(pubId).collection('shards').doc('0').update({
