@@ -8,6 +8,7 @@ import FlyerDetail from 'Flyer/detail';
 import PreviewFlyer from 'Flyer/published';
 import RequestList from 'Request/list';
 import RequestDetail from 'Request/detail';
+import RequestListWithSpace from 'Request/ListWithSpace';
 import SpaceList from 'Space/List';
 import PublishedFlyer from 'Request/published';
 import AppFooter from 'components/AppFooter';
@@ -72,8 +73,13 @@ export const routes = {
     component: RequestDetail,
   },
   spaceList: {
+    exact: true,
     path: '/spaces',
     component: SpaceList,
+  },
+  requestListWithSpace: {
+    path: '/spaces/:spaceId/requets',
+    component: RequestListWithSpace,
   },
   about: {
     path: '/about',
