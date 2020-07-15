@@ -8,6 +8,7 @@ import FlyerDetail from 'Flyer/detail';
 import PreviewFlyer from 'Flyer/published';
 import RequestList from 'Request/list';
 import RequestDetail from 'Request/detail';
+import SpaceList from 'Space/List';
 import PublishedFlyer from 'Request/published';
 import AppFooter from 'components/AppFooter';
 import Lab from 'views/Lab';
@@ -69,6 +70,10 @@ export const routes = {
   requestDetail: {
     path: '/requests/:id',
     component: RequestDetail,
+  },
+  spaceList: {
+    path: '/spaces',
+    component: SpaceList,
   },
   about: {
     path: '/about',
