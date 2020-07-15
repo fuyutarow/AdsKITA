@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import ImageUploader from 'react-images-upload';
 
-import { debug, sampleBase64 } from 'plugins/debug';
+import { debug } from 'plugins/debug';
 import { Base64 } from 'js-base64';
 
 import { useDropzone } from 'react-dropzone';
@@ -157,12 +157,6 @@ export default () => {
       />
       <div>dropzone</div>
       <MyDropzone />
-      {/* <App /> */}
-      <img {...{
-        src: sampleBase64,
-        width: 300,
-        height: 300,
-      }} />
       <div>gif</div>
       <iframe
         {...{

@@ -1,15 +1,4 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { AuthContext, AuthProvider } from 'contexts/auth';
-import TicketList from 'views/TicketList';
-import About from 'views/About';
-import NotFound from 'views/NotFound';
-import TicketDetail from 'views/TicketDetail';
-import NewTicket from 'views/NewTicket';
-import PurchasedTicketList from 'views/PurchasedTicketList';
-import ProductHeroLayout from 'views/ProductHeroLayout';
-
-import Login from 'components/Login';
-import Logout from 'components/Logout';
 
 import { BrowserRouter, Switch, Route, Link } from 'react-router-dom';
 
