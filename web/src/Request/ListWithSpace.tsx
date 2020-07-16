@@ -26,7 +26,6 @@ import {
   DomainSpace,
 } from 'models';
 import { AuthContext, AuthContextProps } from 'contexts/auth';
-import AppHeader from 'components/AppHeader';
 import GenEmbedURL from './GenEmbedURL';
 import { head7 } from 'utils';
 
@@ -34,12 +33,7 @@ export default () => {
   const auth = useContext(AuthContext);
 
   return auth
-    ? (
-      <>
-        <AppHeader />
-        <Main auth={auth} />
-      </>
-    )
+    ? <Main auth={auth} />
     : (
       <div>
         ログインしてチケットを出品しよう
@@ -364,7 +358,6 @@ const Main: React.FC<{ auth: AuthContextProps }> = ({ auth }) => {
       <DebugButton onClick={e => {
       }} />
       <GenEmbedURL spaceId={spaceId} />
-      <div>{Object.keys(pubRecord).length}</div>
       <PubTable />
     </div>
   );

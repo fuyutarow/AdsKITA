@@ -17,7 +17,7 @@ const GenEmbedURL: React.FC<{
   const embedURL = `https://adskita.now.sh/spaces/${spaceId}/pub?key=${key}`;
   const iframeHTML =
     `
-<iframe width=300 height=250 style="border-width: 0;" src="${embedURL}"></iframe>
+<iframe width="300" height="250" style="border-width: 0;" src="${embedURL}"></iframe>
 `;
 
   const ClipButton: React.FC<{ text: string }> = ({ text }) => {

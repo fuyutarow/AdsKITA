@@ -13,13 +13,11 @@ import RequestDetailWithSpace from 'Request/DetailWithSpace';
 import SpaceList from 'Space/List';
 import SpacePub from 'Space/Pub';
 import PublishedFlyer from 'Request/published';
-import AppFooter from 'components/AppFooter';
 import Lab from 'views/Lab';
 import LabLink from 'views/Lab/link';
 import Redirect from 'redirect';
-
-import LoginView from 'views/LoginView'; import Logout from 'components/Logout';
-import AppHeader from 'components/AppHeader';
+import LoginView from 'views/LoginView';
+import Logout from 'components/Logout';
 
 export const routes = {
   home: {

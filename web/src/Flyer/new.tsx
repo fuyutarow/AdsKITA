@@ -13,8 +13,6 @@ import { toastNotice } from 'plugins/toast';
 import { Flyer } from 'models';
 import { routes } from 'router';
 import { AuthContext, AuthProvider, AuthContextProps } from 'contexts/auth';
-import AppHeader from 'components/AppHeader';
-import AppFooter from 'components/AppFooter';
 import InputImage from './inputImage';
 import InputLinkURL, { isValidURL } from './inputLinkURL';
 
@@ -77,7 +75,6 @@ const NewTicketEditor: React.FC<{ auth: AuthContextProps }> = ({ auth }) => {
 
   return (
     <>
-      <AppHeader />
       <Container maxWidth="sm" style={{
         padding: 10,
 
@@ -102,7 +99,6 @@ const NewTicketEditor: React.FC<{ auth: AuthContextProps }> = ({ auth }) => {
           </div>
         </Paper>
       </Container>
-      <AppFooter />
     </>
   );
 };

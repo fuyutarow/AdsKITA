@@ -38,7 +38,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "GENERATE_SOURCEMAP=false react-scripts build",
     "build:CI": "CI= npm run build",
     "test": "react-scripts test",
     "lint": "eslint . --fix -c .eslintrc.js --ext js,jsx,ts,tsx --ignore-pattern='!.*'",

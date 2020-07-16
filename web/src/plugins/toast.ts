@@ -11,16 +11,14 @@ export const toastNotice = (
   },
 ): React.ReactText | null => {
   const backgroundColor: string = options?.color || 'brown';
-  return isDevelopment || isStaging
-    ? (
-      toast.info(
-        content,
-        {
-          autoClose,
-          className: css({ backgroundColor }),
-          ...options,
-        },
-      )
+  return (
+    toast.info(
+      content,
+      {
+        autoClose,
+        className: css({ backgroundColor }),
+        ...options,
+      },
     )
-    : null;
+  );
 };
