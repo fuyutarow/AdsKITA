@@ -87,33 +87,46 @@ const FC: React.FC<{ flyer: Flyer }> = ({ flyer }) => {
   };
 
   const validation = {
-    budget(budget: number): boolean {
-      return budget >= 100 && budget <= 1e4;
+    budget(price: number): boolean {
+      return price >= 100 && price <= 1e4 && Number.isInteger(price);
+    },
+    days(price: number): boolean {
+      return price >= 3 && price <= 100 && Number.isInteger(price);
     },
   };
 
   const [budget, setBudget] = useState(100);
+  const [days, setDays] = useState(3);
 
   return (
     <div>
-      <div> このドメインに広告を掲載依頼する </div>
+      <div>掲載依頼するドメイン: <a href={`//${hostname}`} target="_blank">{hostname}</a></div>
       <div>
         <InputLinkURL {...{
           linkURL: domainURL,
           setLinkURL: setDomainURL,
         }} />
       </div>
-      <div>掲載依頼するドメイン: <a href={`//${hostname}`} target="_blank">{hostname}</a></div>
-      <div>予算上限</div>
+      <div>
+        {`1日あたりの予算: ${(budget / days).toFixed(1)}円`}
+      </div>
       <InputPrice {...{
         price: budget,
         setPrice: setBudget,
         validation: validation.budget,
-        label: '予算',
-        helperText: '予算は100円以上・10,000円以下で指定してください',
         variant: 'outlined',
+        label: '予算',
+        helperText: '100円以上・10,000円以下で指定してください',
       }}/>
-      {budget}
+      <InputPrice {...{
+        price: days,
+        setPrice: setDays,
+        validation: validation.days,
+        variant: 'outlined',
+        label: '出稿日数',
+        helperText: '3日以上・100日以下で指定してください',
+        suffix: '日',
+      }}/>
       <div>
         <RequestButton />
       </div>
