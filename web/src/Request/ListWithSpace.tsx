@@ -20,12 +20,14 @@ import { routes } from 'router';
 import {
   Timestamp,
   PublishedFlyer, PubRecord,
+  PubPlan, PubPlanRecord,
   PublishedFlyerWithStatus, PubRecordWithStatus, StatusPublish,
   DomainSpace,
 } from 'models';
 import { AuthContext, AuthContextProps } from 'contexts/auth';
 import AppHeader from 'components/AppHeader';
 import { head7 } from 'utils';
+import { threadId } from 'worker_threads';
 
 export default () => {
   const auth = useContext(AuthContext);
@@ -44,7 +46,7 @@ export default () => {
     );
 };
 
-const AdTile: React.FC<{ flyer: PublishedFlyerWithStatus }> = ({ flyer }) => {
+const AdTile: React.FC<{ flyer: PublishedFlyerWithStatus; domainSpace: DomainSpace }> = ({ flyer, domainSpace }) => {
   const { spaceId } = useParams();
   const history = useHistory();
   const breakpoint = 'L';
@@ -52,14 +54,39 @@ const AdTile: React.FC<{ flyer: PublishedFlyerWithStatus }> = ({ flyer }) => {
   const auth = useContext(AuthContext);
   const domain = decodeURIComponent(spaceId);
 
+  // 掲載ステータス変更による掲載計画の更新
   useEffect(
     () => {
       if (!auth) return;
       db.collection('users').doc(auth.user.id).collection('domains').doc(domain).collection('pubs').doc(flyer.pubId).update({
         statusPublish,
       });
+
+      const pub = flyer;
+      const record = domainSpace.pubPlanRecord;
+      if (statusPublish === 'going') {
+        const pubPlan: PubPlan = {
+          pubId: pub.pubId,
+          budgetPerDay: pub.budgetPerDay,
+        };
+        record[pub.pubId] = pubPlan;
+      } else {
+        record[pub.pubId] = undefined;
+        // record[pub.pubId] = 'DELETED';
+      }
+
+      const pubPlanRecord: PubPlanRecord = {};
+      Object.values(record)
+        .filter((x): x is PubPlan => Boolean(x))
+        .forEach(pubPlan => {
+          pubPlanRecord[pubPlan.pubId] = pubPlan;
+        });
+
+      db.collection('users').doc(auth.user.id).collection('domains').doc(domain).update({
+        pubPlanRecord,
+      });
     },
-    [auth, domain, flyer.pubId, statusPublish],
+    [auth, domain, domainSpace.pubPlanRecord, flyer, statusPublish],
   );
 
   const cardPadding = (breakpoint: string) => {
@@ -307,11 +334,12 @@ const Main: React.FC<{ auth: AuthContextProps }> = ({ auth }) => {
   );
 
   const PubTable = () => {
+    if (!domainSpace) return null;
     return (
       <>
         {Object.values(pubRecord)
           .filter((x): x is PublishedFlyerWithStatus => Boolean(x))
-          .map(pub => <AdTile flyer={pub} />)
+          .map(pub => <AdTile flyer={pub} domainSpace={domainSpace} />)
         }
       </>
     );
