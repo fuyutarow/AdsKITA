@@ -20,7 +20,7 @@ import { routes } from 'router';
 import {
   Timestamp,
   PublishedFlyer, PubRecord,
-  PublishedFlyerWithStatus, PubRecordWithStatus,
+  PublishedFlyerWithStatus, PubRecordWithStatus, StatusPublish,
   DomainSpace,
 } from 'models';
 import { AuthContext, AuthContextProps } from 'contexts/auth';
@@ -48,6 +48,19 @@ const AdTile: React.FC<{ flyer: PublishedFlyerWithStatus }> = ({ flyer }) => {
   const { spaceId } = useParams();
   const history = useHistory();
   const breakpoint = 'L';
+  const [statusPublish, setStatusPublish] = useState<StatusPublish>(flyer.statusPublish);
+  const auth = useContext(AuthContext);
+  const domain = decodeURIComponent(spaceId);
+
+  useEffect(
+    () => {
+      if (!auth) return;
+      db.collection('users').doc(auth.user.id).collection('domains').doc(domain).collection('pubs').doc(flyer.pubId).update({
+        statusPublish,
+      });
+    },
+    [auth, domain, flyer.pubId, statusPublish],
+  );
 
   const cardPadding = (breakpoint: string) => {
     return breakpoint === 'L'
@@ -76,18 +89,64 @@ const AdTile: React.FC<{ flyer: PublishedFlyerWithStatus }> = ({ flyer }) => {
 
   const StatusButton: React.FC<{
     style?: React.CSSProperties | undefined;
-  }> = ({ style, children }) => {
+    onClick?: ((event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void) | undefined;
+  }> = ({ children, style, onClick }) => {
+
     return (
-      <IconButton style={{
-        margin: 5,
-        borderRadius: 5,
-        width: 40,
-        height: 40,
-        color: 'white',
-        ...style,
-      }}>
+      <IconButton
+        style={{
+          margin: 5,
+          borderRadius: 5,
+          width: 40,
+          height: 40,
+          color: 'white',
+          ...style,
+        }}
+        onClick={onClick}
+      >
         {children}
       </IconButton>
+    );
+  };
+
+  const StatusButtonDiv = () => {
+
+    return (
+      <>
+        <StatusButton children={<DoneIcon />}
+          style={statusPublish === 'going'
+            ? { backgroundColor: colors.green[500] }
+            : { backgroundColor: colors.green[50], border: 'solid 1px green' }
+          }
+          onClick={e => {
+            e.stopPropagation();
+            // if (statusPublish !== 'going') return;
+            setStatusPublish('going');
+          }}
+        />
+        <StatusButton children={<WarningIcon />}
+          style={statusPublish === 'pending'
+            ? { backgroundColor: colors.amber[500] }
+            : { backgroundColor: colors.amber[100], border: `solid 1px ${colors.amber[500]}` }
+          }
+          onClick={e => {
+            e.stopPropagation();
+            // if (statusPublish !== 'pending') return;
+            setStatusPublish('pending');
+          }}
+        />
+        <StatusButton children={<BlockIcon />}
+          style={statusPublish === 'blocked'
+            ? { backgroundColor: colors.red[500] }
+            : { backgroundColor: colors.red[50], border: 'solid 1px red' }
+          }
+          onClick={e => {
+            e.stopPropagation();
+            // if (statusPublish !== 'blocked') return;
+            setStatusPublish('blocked');
+          }}
+        />
+      </>
     );
   };
 
@@ -115,15 +174,7 @@ const AdTile: React.FC<{ flyer: PublishedFlyerWithStatus }> = ({ flyer }) => {
               }
               <div>対象ドメイン: <a href={`//${flyer.targetDoamin}`} target="_blank">{flyer.targetDoamin}</a></div>
               <div style={{ margin: 'auto' }}>
-                <StatusButton children={<DoneIcon />} style={{
-                  backgroundColor: colors.green[flyer.statusPublish === 'going' ? 500 : 100],
-                }} />
-                <StatusButton children={<WarningIcon />} style={{
-                  backgroundColor: colors.amber[flyer.statusPublish === 'pending' ? 700 : 100],
-                }} />
-                <StatusButton children={<BlockIcon />} style={{
-                  backgroundColor: colors.red[flyer.statusPublish === 'blocked' ? 500 : 100],
-                }} />
+                <StatusButtonDiv />
               </div>
             </CardContent>
           </div>
