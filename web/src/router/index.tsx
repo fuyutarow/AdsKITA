@@ -11,6 +11,7 @@ import RequestDetail from 'Request/detail';
 import RequestListWithSpace from 'Request/ListWithSpace';
 import RequestDetailWithSpace from 'Request/DetailWithSpace';
 import SpaceList from 'Space/List';
+import SpacePub from 'Space/Pub';
 import PublishedFlyer from 'Request/published';
 import AppFooter from 'components/AppFooter';
 import Lab from 'views/Lab';
@@ -77,6 +78,11 @@ export const routes = {
     exact: true,
     path: '/spaces',
     component: SpaceList,
+  },
+  spacePub: {
+    exact: true,
+    path: '/spaces/:spaceId/pub',
+    component: SpacePub,
   },
   requestListWithSpace: {
     exact: true,
