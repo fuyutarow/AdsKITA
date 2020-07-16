@@ -82,7 +82,7 @@ const LogoTitle = () => {
   const history = useHistory();
 
   return (
-    <>
+    <Link to={routes.home.path}>
       <ListItem>
         <ListItemIcon>
           <img src="/icons/192x192.png" height="36px" style={{
@@ -115,7 +115,7 @@ const LogoTitle = () => {
           v{version}
         </Typography>
       </div>
-    </>
+    </Link>
   );
 };
 
@@ -219,7 +219,7 @@ const LeftSideBar: React.FC<{
         <PlateButton {...{
           value: '出稿中',
           icon: <ViewModuleIcon style={iconStyle} />,
-          to: routes.flyerNew.path,
+          to: routes.requestList.path,
         }} />
       </List>
       <Divider />

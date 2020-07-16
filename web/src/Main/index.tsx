@@ -6,12 +6,14 @@ import { ToastContainer, toast } from 'react-toastify';
 
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
+import Avatar from '@material-ui/core/Avatar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
 import ViewModuleIcon from '@material-ui/icons/ViewModule';
+import DomainIcon from '@material-ui/icons/Domain';
 import { css } from 'emotion';
 
 import { isDevelopment } from 'plugins/env';
@@ -71,20 +73,8 @@ const useStyles = makeStyles((theme: Theme) =>
       width: '100%',
       bottom: 0,
       fontSize: iconStyle.width,
-      color: '#58E2E6',
+      color: brandColors.khaki,
       backgroundColor: brandColors.ground,
-    },
-    notchHangerL: {
-      zIndex: 999,
-      position: 'fixed',
-      top: 0,
-      right: 300,
-    },
-    notchHangerMS: {
-      zIndex: 999,
-      position: 'fixed',
-      top: 0,
-      right: 20,
     },
   }),
 );
@@ -96,6 +86,7 @@ export default () => {
   const [openRight, setOpenRight] = useState(false);
   const [value, setValue] = React.useState(0);
   const history = useHistory();
+  const auth = useContext(AuthContext);
 
   const BottomNav = () => {
     return (
@@ -108,26 +99,27 @@ export default () => {
         className={classes.bottomNav}
       >
         <BottomNavigationAction
-          label="pinned"
+          label="me"
           icon={
-            <img
-              src="https://img.icons8.com/ios/50/000000/hashtag.png"
-              style={iconStyle}
-            />
+            auth ? <Avatar src={auth.user.photoURL as string} />
+              : <Avatar />
           }
           onClick={e => { setOpenLeft(true); }}
         />
         <BottomNavigationAction
-          label="tiles"
-          icon={
-            <ViewModuleIcon className={css`font-size: 45px !important`} />
-          }
+          label="offer"
+          icon={<AddCircleIcon className={css`font-size: 45px !important`} />}
+          onClick={e => { history.push(routes.flyerNew.path); }}
         />
         <BottomNavigationAction
-          label="add"
-          icon={
-            <AddCircleIcon className={css`font-size: 45px !important`} />
-          }
+          label="requests"
+          icon={<ViewModuleIcon className={css`font-size: 45px !important`} />}
+          onClick={e => { history.push(routes.requestList.path); }}
+        />
+        <BottomNavigationAction
+          label="take"
+          icon={<DomainIcon className={css`font-size: 45px !important`} />}
+          onClick={e => { history.push(routes.spaceList.path); }}
         />
       </BottomNavigation>
     );

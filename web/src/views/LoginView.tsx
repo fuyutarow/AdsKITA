@@ -9,7 +9,7 @@ export default () => {
   return (
     <>
       <Typography variant="h5" component="h2">
-      ようこそSaiirilab Appsへ
+        ようこそ Sairilab Apps へ
       </Typography>
       <Login />
     </>
