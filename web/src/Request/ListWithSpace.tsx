@@ -8,7 +8,6 @@ import CardActionArea from '@material-ui/core/CardActionArea';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
-import DeleteIcon from '@material-ui/icons/Delete';
 import IconButton from '@material-ui/core/IconButton';
 import BlockIcon from '@material-ui/icons/Block';
 import DoneIcon from '@material-ui/icons/Done';
@@ -42,6 +41,7 @@ export default () => {
 };
 
 const AdTile: React.FC<{ flyer: PublishedFlyer }> = ({ flyer }) => {
+  const { spaceId } = useParams();
   const history = useHistory();
   const breakpoint = 'L';
 
@@ -86,13 +86,15 @@ const AdTile: React.FC<{ flyer: PublishedFlyer }> = ({ flyer }) => {
       </IconButton>
     );
   };
+
   return (
     <div style={cardPadding(breakpoint)}>
       <Card style={cardStyle(breakpoint)}>
         <CardActionArea onClick={e => {
           history.push({
-            pathname: routes.requestDetail.path
-              .replace(':id', flyer.pubId),
+            pathname: routes.requestDetailWithSpace.path
+              .replace(':spaceId', spaceId)
+              .replace(':pubId', flyer.pubId),
           });
         }}>
           <div style={cardStyle(breakpoint)}>
