@@ -1,3 +1,4 @@
+import { v4 as uuid } from 'uuid';
 import moment from 'moment';
 import React, { useState, useEffect, useContext } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
@@ -20,11 +21,13 @@ import { routes } from 'router';
 import {
   Timestamp,
   PublishedFlyer, PubRecord,
+  PubPlan, PubPlanRecord, PubPlanWithoutRate, PubPlanRecordWithoutRate,
   PublishedFlyerWithStatus, PubRecordWithStatus, StatusPublish,
   DomainSpace,
 } from 'models';
 import { AuthContext, AuthContextProps } from 'contexts/auth';
 import AppHeader from 'components/AppHeader';
+import GenEmbedURL from './GenEmbedURL';
 import { head7 } from 'utils';
 
 export default () => {
@@ -44,7 +47,7 @@ export default () => {
     );
 };
 
-const AdTile: React.FC<{ flyer: PublishedFlyerWithStatus }> = ({ flyer }) => {
+const AdTile: React.FC<{ flyer: PublishedFlyerWithStatus; domainSpace: DomainSpace }> = ({ flyer, domainSpace }) => {
   const { spaceId } = useParams();
   const history = useHistory();
   const breakpoint = 'L';
@@ -52,14 +55,52 @@ const AdTile: React.FC<{ flyer: PublishedFlyerWithStatus }> = ({ flyer }) => {
   const auth = useContext(AuthContext);
   const domain = decodeURIComponent(spaceId);
 
+  // 掲載ステータス変更による掲載計画の更新
   useEffect(
     () => {
       if (!auth) return;
       db.collection('users').doc(auth.user.id).collection('domains').doc(domain).collection('pubs').doc(flyer.pubId).update({
         statusPublish,
       });
+
+      const pub = flyer;
+      const record = domainSpace.pubPlanRecord as PubPlanRecordWithoutRate;
+      if (statusPublish === 'going') {
+        const pubPlan: PubPlanWithoutRate = {
+          pubId: pub.pubId,
+          budgetPerDay: pub.budgetPerDay,
+        };
+        record[pub.pubId] = pubPlan;
+      } else {
+        record[pub.pubId] = undefined;
+        // record[pub.pubId] = 'DELETED';
+      }
+
+      let totalAmountPerDay = 0;
+      Object.values(record)
+        .filter((x): x is PubPlanWithoutRate => Boolean(x))
+        .forEach(pubPlan => {
+          totalAmountPerDay += pubPlan.budgetPerDay;
+        });
+
+      const pubPlanRecord: PubPlanRecord = {};
+      Object.values(record)
+        .filter((x): x is PubPlanWithoutRate => Boolean(x))
+        .forEach(pubPlan => {
+          pubPlanRecord[pubPlan.pubId] = {
+            ...pubPlan,
+            rate: pubPlan.budgetPerDay / totalAmountPerDay,
+          };
+        });
+
+      const d: Partial<DomainSpace> = {
+        pubPlanRecord,
+        totalAmountPerDay,
+      };
+
+      db.collection('users').doc(auth.user.id).collection('domains').doc(domain).update(d);
     },
-    [auth, domain, flyer.pubId, statusPublish],
+    [auth, domain, domainSpace.pubPlanRecord, flyer, statusPublish],
   );
 
   const cardPadding = (breakpoint: string) => {
@@ -167,14 +208,24 @@ const AdTile: React.FC<{ flyer: PublishedFlyerWithStatus }> = ({ flyer }) => {
               image={flyer.imageURL}
             />
             <CardContent style={{ height: '100%' }}>
-              <div>id: {head7(flyer.id)}</div>
+              {/* <div>id: {head7(flyer.id)}</div> */}
               {flyer.linkURL
-                ? <div>リンクURL: <a href={flyer.linkURL} target="_blank">{flyer.linkURL}</a></div>
+                ? <div><a href={flyer.linkURL} target="_blank">{flyer.linkURL}</a></div>
                 : <div>リンクURL: なし </div>
               }
-              <div>対象ドメイン: <a href={`//${flyer.targetDoamin}`} target="_blank">{flyer.targetDoamin}</a></div>
+              {/* <div>対象ドメイン: <a href={`//${flyer.targetDoamin}`} target="_blank">{flyer.targetDoamin}</a></div> */}
+              <div>残り掲載日数: {flyer.days} 日</div>
+              <div>予算: {flyer.budget} 円</div>
+              <div>日当予算: {flyer.budgetPerDay.toFixed(1)} 円</div>
               <div style={{ margin: 'auto' }}>
                 <StatusButtonDiv />
+              </div>
+              <div>
+                {
+                  statusPublish === 'going' ? '広告掲載中' :
+                    statusPublish === 'pending' ? '広告掲載を保留' :
+                      statusPublish === 'blocked' ? '広告掲載をブロック' : null
+                }
               </div>
             </CardContent>
           </div>
@@ -297,11 +348,12 @@ const Main: React.FC<{ auth: AuthContextProps }> = ({ auth }) => {
   );
 
   const PubTable = () => {
+    if (!domainSpace) return null;
     return (
       <>
         {Object.values(pubRecord)
           .filter((x): x is PublishedFlyerWithStatus => Boolean(x))
-          .map(pub => <AdTile flyer={pub} />)
+          .map(pub => <AdTile flyer={pub} domainSpace={domainSpace} />)
         }
       </>
     );
@@ -311,6 +363,7 @@ const Main: React.FC<{ auth: AuthContextProps }> = ({ auth }) => {
     <div>
       <DebugButton onClick={e => {
       }} />
+      <GenEmbedURL spaceId={spaceId} />
       <div>{Object.keys(pubRecord).length}</div>
       <PubTable />
     </div>

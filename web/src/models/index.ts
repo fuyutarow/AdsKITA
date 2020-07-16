@@ -22,6 +22,9 @@ export type PublishedFlyer = Flyer & {
   numShards: number;
   targetDoamin: string;
   createdAt: Timestamp;
+  budget: number;
+  days: number;
+  budgetPerDay: number;
 }
 export type PubRecord = Record<PubId, PublishedFlyer | undefined>
 
@@ -42,12 +45,26 @@ export type UserInfo = UserInfoCore & {
   domains: Array<string>;
 }
 
+export interface PubPlanWithoutRate {
+  pubId: PubId;
+  budgetPerDay: number;
+}
+export interface PubPlan {
+  pubId: PubId;
+  budgetPerDay: number;
+  rate: number;
+}
+export type PubPlanRecord = Record<PubId, PubPlan | undefined>
+export type PubPlanRecordWithoutRate = Record<PubId, PubPlanWithoutRate | undefined>
+
 export interface DomainSpace {
   domain: string;
   ownerId: UserId;
   createdAt: Timestamp;
   pulledAt: Timestamp;
   defaultStatusPublish: StatusPublish;
+  pubPlanRecord: PubPlanRecord;
+  totalAmountPerDay: number;
 }
 
 export enum TicketStatus {

@@ -1,5 +1,6 @@
 import { v4 as uuid } from 'uuid';
 import React, { useState, useEffect, useContext, useCallback } from 'react';
+
 import { Link, useParams, useHistory } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import { colors } from '@material-ui/core';
@@ -10,13 +11,33 @@ import { routes } from 'router';
 import { Flyer, PublishedFlyer, Timestamp } from 'models';
 import { AuthContext } from 'contexts/auth';
 import InputLinkURL, { isValidURL } from './inputLinkURL';
+import InputPrice from './InputPrice';
 
 const FC: React.FC<{ flyer: Flyer }> = ({ flyer }) => {
   const history = useHistory();
   const auth = useContext(AuthContext);
   const [hostname, setHostname] = useState('');
   const [domainURL, setDomainURL] = useState<string>('');
-  const valid = isValidURL(domainURL) && domainURL !== '';
+  const [budget, setBudget] = useState(100);
+  const [days, setDays] = useState(3);
+  const budgetPerDay = Number((budget / days).toFixed(3));
+
+  const validation = {
+    domain(url: string): boolean {
+      return isValidURL(url) && url !== '';
+    },
+    budget(price: number): boolean {
+      return price >= 100 && price <= 1e4 && Number.isInteger(price);
+    },
+    days(price: number): boolean {
+      return price >= 3 && price <= 100 && Number.isInteger(price);
+    },
+  };
+
+  const valid =
+    validation.domain(domainURL)
+    && validation.budget(budget)
+    && validation.days(days);
 
   useEffect(
     () => {
@@ -43,6 +64,9 @@ const FC: React.FC<{ flyer: Flyer }> = ({ flyer }) => {
       numShards: 1,
       targetDoamin: hostname,
       createdAt: Timestamp.now(),
+      budget,
+      days,
+      budgetPerDay,
     };
     db.collection('pubs').doc(pub.pubId).set(pub);
     db.collection('pubs').doc(pub.pubId).collection('shards').doc('0').set({
@@ -86,14 +110,33 @@ const FC: React.FC<{ flyer: Flyer }> = ({ flyer }) => {
 
   return (
     <div>
-      <div> このドメインに広告を掲載依頼する </div>
+      <div>掲載依頼するドメイン: <a href={`//${hostname}`} target="_blank">{hostname}</a></div>
       <div>
         <InputLinkURL {...{
           linkURL: domainURL,
           setLinkURL: setDomainURL,
         }} />
       </div>
-      <div>掲載依頼するドメイン: <a href={`//${hostname}`} target="_blank">{hostname}</a></div>
+      <div>
+        {`1日あたりの予算: ${budgetPerDay.toFixed(1)}円`}
+      </div>
+      <InputPrice {...{
+        price: budget,
+        setPrice: setBudget,
+        validation: validation.budget,
+        variant: 'outlined',
+        label: '予算',
+        helperText: '100円以上・10,000円以下で指定してください',
+      }} />
+      <InputPrice {...{
+        price: days,
+        setPrice: setDays,
+        validation: validation.days,
+        variant: 'outlined',
+        label: '出稿日数',
+        helperText: '3日以上・100日以下で指定してください',
+        suffix: '日',
+      }} />
       <div>
         <RequestButton />
       </div>
