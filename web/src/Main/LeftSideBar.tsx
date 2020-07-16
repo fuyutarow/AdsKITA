@@ -24,6 +24,7 @@ import { css } from 'emotion';
 
 import { debugToast } from 'plugins/debug';
 import { version, isDevelopment } from 'plugins/env';
+import { brandColors } from 'plugins/brand';
 import { AuthContext } from 'contexts/auth';
 import { routes } from 'router';
 
@@ -31,7 +32,7 @@ import style from './style.module.css';
 
 const drawerWidth = 240;
 
-const iconStyle = { fontSize: '45px', color: '154145' };
+const iconStyle = { fontSize: '45px', color: brandColors.khaki };
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -48,15 +49,14 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     drawerPaper: {
       width: drawerWidth,
-      'background-color': '#58E2E6',
+      backgroundColor: brandColors.ground,
     },
     // necessary for content to be below app bar
     toolbar: theme.mixins.toolbar,
     content: {
       flexGrow: 1,
-      backgroundColor: theme.palette.background.default,
       padding: theme.spacing(3),
-      'background-color': '#58E2E6',
+      backgroundColor: brandColors.ground,
       'min-height': '100vh',
     },
     version: {
@@ -67,7 +67,7 @@ const useStyles = makeStyles((theme: Theme) =>
       top: 'auto',
       bottom: 0,
       width: '240px',
-      'background-color': '#58E2E6',
+      backgroundColor: brandColors.ground,
       zIndex: 99,
       // paddingTop: 20,
     },
@@ -81,24 +81,31 @@ const LogoTitle = () => {
     <>
       <ListItem>
         <ListItemIcon>
-          <img src="/icons/fab.png" height="45px" style={{
+          <img src="/icons/192x192.png" height="45px" style={{
             position: 'relative',
             left: 3,
           }} />
         </ListItemIcon>
         <ListItemText>
           <Typography variant="h2">
-            <span className={style['App-name']}>
-              notch
+            <span style={{
+              color: brandColors.orange,
+              fontWeight: 700,
+              fontSize: 40,
+            }}>
+              AdsKITA
             </span>
           </Typography>
         </ListItemText>
       </ListItem>
-      <div className={style['App-version']}>
+      <div style={{
+        color: brandColors.orange,
+        textAlign: 'center',
+        position: 'relative',
+        top: -20,
+      }}>
         <Typography variant="body2">
-          <span className={style['App-name']}>
-            v{version}
-          </span>
+          v{version}
         </Typography>
       </div>
     </>
@@ -115,7 +122,10 @@ const Tiles = () => {
       </ListItemIcon>
       <ListItemText>
         <Typography variant="h6">
-          <span className={style['App-name']}>
+          <span style={{
+            color: brandColors.khaki,
+            fontWeight: 800,
+          }}>
             一覧
           </span>
         </Typography>
@@ -124,18 +134,24 @@ const Tiles = () => {
   );
 };
 
-const NewPage = () => {
+const PlateButton: React.FC<{
+  value: string;
+  icon: React.ReactNode;
+}> = ({ value, icon }) => {
   const history = useHistory();
 
   return (
     <ListItem>
       <ListItemIcon>
-        <AddCircleIcon style={iconStyle} />
+        {icon}
       </ListItemIcon>
       <ListItemText>
         <Typography variant="h6">
-          <span className={style['App-name']}>
-            新しいページ
+          <span style={{
+            color: brandColors.khaki,
+            fontWeight: 800,
+          }}>
+            {value}
           </span>
         </Typography>
       </ListItemText>
@@ -193,7 +209,10 @@ const LeftSideBar: React.FC<{
       <Divider />
       <List>
         <Tiles />
-        <NewPage />
+        <PlateButton {...{
+          value: 'flyers/new',
+          icon: <AddCircleIcon style={iconStyle} />,
+        }} />
       </List>
       <Divider />
     </SwipeableDrawer>

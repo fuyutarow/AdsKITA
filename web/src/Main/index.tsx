@@ -16,6 +16,7 @@ import { css } from 'emotion';
 
 import { isDevelopment } from 'plugins/env';
 import { useBreakpoint } from 'plugins/breakpoint';
+import { brandColors } from 'plugins/brand';
 import { routes } from 'router';
 import { AuthContext, AuthProvider } from 'contexts/auth';
 
@@ -23,7 +24,7 @@ import LeftSideBar from './LeftSideBar';
 import style from './style.module.css';
 
 const drawerWidth = 240;
-const iconStyle = { width: '45px', color: '154145' };
+const iconStyle = { width: '45px', color: brandColors.khaki };
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -46,25 +47,22 @@ const useStyles = makeStyles((theme: Theme) =>
     toolbar: theme.mixins.toolbar,
     contentL: {
       flexGrow: 1,
-      backgroundColor: theme.palette.background.default,
       padding: '30px 12px 60px 12px',
-      'background-color': '#58E2E6',
+      backgroundColor: brandColors.ground,
       'min-height': '100vh',
       position: 'relative',
     },
     contentMS: {
       flexGrow: 1,
-      backgroundColor: theme.palette.background.default,
       padding: '30px 5px 60px 5px',
-      'background-color': '#58E2E6',
+      backgroundColor: brandColors.ground,
       'min-height': '100vh',
       position: 'relative',
     },
     content: {
       flexGrow: 1,
-      backgroundColor: theme.palette.background.default,
       padding: theme.spacing(3),
-      'background-color': '#58E2E6',
+      backgroundColor: brandColors.ground,
       'min-height': '100vh',
       position: 'relative',
     },
@@ -74,7 +72,7 @@ const useStyles = makeStyles((theme: Theme) =>
       bottom: 0,
       fontSize: iconStyle.width,
       color: '#58E2E6',
-      'background-color': '#30AFC9',
+      backgroundColor: brandColors.ground,
     },
     notchHangerL: {
       zIndex: 999,
@@ -135,7 +133,7 @@ export default () => {
     );
   };
 
-  if (breakpoint === 'L') {
+  if (['L', 'M'].includes(breakpoint)) {
     return (
       <div className={classes.root}>
         <LeftSideBar variant='permanent' />
