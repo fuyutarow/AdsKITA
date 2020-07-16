@@ -20,7 +20,7 @@ import { routes } from 'router';
 import {
   Timestamp,
   PublishedFlyer, PubRecord,
-  PubPlan, PubPlanRecord,
+  PubPlan, PubPlanRecord, PubPlanWithoutRate, PubPlanRecordWithoutRate,
   PublishedFlyerWithStatus, PubRecordWithStatus, StatusPublish,
   DomainSpace,
 } from 'models';
@@ -63,9 +63,9 @@ const AdTile: React.FC<{ flyer: PublishedFlyerWithStatus; domainSpace: DomainSpa
       });
 
       const pub = flyer;
-      const record = domainSpace.pubPlanRecord;
+      const record = domainSpace.pubPlanRecord as PubPlanRecordWithoutRate;
       if (statusPublish === 'going') {
-        const pubPlan: PubPlan = {
+        const pubPlan: PubPlanWithoutRate = {
           pubId: pub.pubId,
           budgetPerDay: pub.budgetPerDay,
         };
@@ -75,16 +75,29 @@ const AdTile: React.FC<{ flyer: PublishedFlyerWithStatus; domainSpace: DomainSpa
         // record[pub.pubId] = 'DELETED';
       }
 
-      const pubPlanRecord: PubPlanRecord = {};
+      let totalAmountPerDay = 0;
       Object.values(record)
-        .filter((x): x is PubPlan => Boolean(x))
+        .filter((x): x is PubPlanWithoutRate => Boolean(x))
         .forEach(pubPlan => {
-          pubPlanRecord[pubPlan.pubId] = pubPlan;
+          totalAmountPerDay += pubPlan.budgetPerDay;
         });
 
-      db.collection('users').doc(auth.user.id).collection('domains').doc(domain).update({
+      const pubPlanRecord: PubPlanRecord = {};
+      Object.values(record)
+        .filter((x): x is PubPlanWithoutRate => Boolean(x))
+        .forEach(pubPlan => {
+          pubPlanRecord[pubPlan.pubId] = {
+            ...pubPlan,
+            rate: pubPlan.budgetPerDay / totalAmountPerDay,
+          };
+        });
+
+      const d: Partial<DomainSpace> = {
         pubPlanRecord,
-      });
+        totalAmountPerDay,
+      };
+
+      db.collection('users').doc(auth.user.id).collection('domains').doc(domain).update(d);
     },
     [auth, domain, domainSpace.pubPlanRecord, flyer, statusPublish],
   );

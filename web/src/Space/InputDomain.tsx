@@ -59,6 +59,7 @@ const InputDomain: React.FC<{
       pulledAt: Timestamp.fromDate(moment('20200123').toDate()),
       defaultStatusPublish: 'pending',
       pubPlanRecord: {},
+      totalAmountPerDay: 0,
     };
 
     db.collection('users').doc(auth.user.id).update({

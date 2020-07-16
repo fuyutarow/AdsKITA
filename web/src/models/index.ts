@@ -45,11 +45,17 @@ export type UserInfo = UserInfoCore & {
   domains: Array<string>;
 }
 
-export interface PubPlan {
+export interface PubPlanWithoutRate {
   pubId: PubId;
   budgetPerDay: number;
 }
-export type PubPlanRecord = Record<PubId, PubPlan | 'DELETED' | undefined>
+export interface PubPlan {
+  pubId: PubId;
+  budgetPerDay: number;
+  rate: number;
+}
+export type PubPlanRecord = Record<PubId, PubPlan | undefined>
+export type PubPlanRecordWithoutRate = Record<PubId, PubPlanWithoutRate | undefined>
 
 export interface DomainSpace {
   domain: string;
@@ -58,6 +64,7 @@ export interface DomainSpace {
   pulledAt: Timestamp;
   defaultStatusPublish: StatusPublish;
   pubPlanRecord: PubPlanRecord;
+  totalAmountPerDay: number;
 }
 
 export enum TicketStatus {
