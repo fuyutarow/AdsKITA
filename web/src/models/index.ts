@@ -22,6 +22,9 @@ export type PublishedFlyer = Flyer & {
   numShards: number;
   targetDoamin: string;
   createdAt: Timestamp;
+  budget: number;
+  days: number;
+  budgetPerDay: number;
 }
 export type PubRecord = Record<PubId, PublishedFlyer | undefined>
 
