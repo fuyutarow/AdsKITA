@@ -14,6 +14,8 @@ export interface Flyer {
   ownerId: UserId;
 }
 
+export type StatusPublish = 'going' | 'pending' | 'blocked'
+
 export type PubId = string
 export type PublishedFlyer = Flyer & {
   pubId: PubId;
@@ -21,8 +23,12 @@ export type PublishedFlyer = Flyer & {
   targetDoamin: string;
   createdAt: Timestamp;
 }
-
 export type PubRecord = Record<PubId, PublishedFlyer | undefined>
+
+export type PublishedFlyerWithStatus = PublishedFlyer & {
+  statusPublish: StatusPublish;
+}
+export type PubRecordWithStatus = Record<PubId, PublishedFlyerWithStatus | undefined>
 
 export interface UserInfoCore {
   id: UserId;
@@ -41,6 +47,7 @@ export interface DomainSpace {
   ownerId: UserId;
   createdAt: Timestamp;
   pulledAt: Timestamp;
+  defaultStatusPublish: StatusPublish;
 }
 
 export enum TicketStatus {
