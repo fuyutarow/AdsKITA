@@ -20,6 +20,8 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import AlternateEmailIcon from '@material-ui/icons/AlternateEmail';
 import ViewModuleIcon from '@material-ui/icons/ViewModule';
+import DomainIcon from '@material-ui/icons/Domain';
+
 import { css } from 'emotion';
 
 import { debugToast } from 'plugins/debug';
@@ -28,6 +30,7 @@ import { brandColors } from 'plugins/brand';
 import { AuthContext } from 'contexts/auth';
 import { routes } from 'router';
 
+import './style.css';
 import style from './style.module.css';
 
 const drawerWidth = 240;
@@ -81,9 +84,10 @@ const LogoTitle = () => {
     <>
       <ListItem>
         <ListItemIcon>
-          <img src="/icons/192x192.png" height="45px" style={{
+          <img src="/icons/192x192.png" height="36px" style={{
             position: 'relative',
             left: 3,
+            top: 5,
           }} />
         </ListItemIcon>
         <ListItemText>
@@ -91,7 +95,9 @@ const LogoTitle = () => {
             <span style={{
               color: brandColors.orange,
               fontWeight: 700,
-              fontSize: 40,
+              fontSize: 42,
+              position: 'relative',
+              left: -10,
             }}>
               AdsKITA
             </span>
@@ -137,10 +143,11 @@ const Tiles = () => {
 const PlateButton: React.FC<{
   value: string;
   icon: React.ReactNode;
-}> = ({ value, icon }) => {
+  to?: any | undefined;
+}> = ({ value, icon, to }) => {
   const history = useHistory();
 
-  return (
+  const C = () => (
     <ListItem>
       <ListItemIcon>
         {icon}
@@ -157,6 +164,10 @@ const PlateButton: React.FC<{
       </ListItemText>
     </ListItem>
   );
+
+  return to
+    ? <Link to={to}><C /></Link>
+    : <C />;
 };
 
 const DebugDiv = () => {
@@ -208,10 +219,15 @@ const LeftSideBar: React.FC<{
       </List>
       <Divider />
       <List>
-        <Tiles />
         <PlateButton {...{
-          value: 'flyers/new',
+          value: '広告を依頼',
           icon: <AddCircleIcon style={iconStyle} />,
+          to: routes.flyerNew.path,
+        }} />
+        <PlateButton {...{
+          value: '広告を受ける',
+          icon: <DomainIcon style={iconStyle} />,
+          to: routes.spaceList.path,
         }} />
       </List>
       <Divider />
