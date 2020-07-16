@@ -21,6 +21,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import AlternateEmailIcon from '@material-ui/icons/AlternateEmail';
 import ViewModuleIcon from '@material-ui/icons/ViewModule';
 import DomainIcon from '@material-ui/icons/Domain';
+import AuthAvatarPlate from './AuthAvatarPlate';
 
 import { css } from 'emotion';
 
