@@ -96,7 +96,7 @@ const Main: React.FC<{ auth: AuthContextProps }> = ({ auth }) => {
   const [patchPubRecord, setPatchPubRecord] = useState<PubRecord>({});
   const [first, setFirst] = useState(true);
   const domain = decodeURIComponent(spaceId);
-  const [domainSpace, setDoaminSpace] = useState<DomainSpace | null>(null);
+  const [domainSpace, setDomainSpace] = useState<DomainSpace | null>(null);
   const [pulledAt, setPulledAt] = useState<Timestamp | null>(null);
 
   // fetch /users/:id/domains on init
@@ -106,7 +106,8 @@ const Main: React.FC<{ auth: AuthContextProps }> = ({ auth }) => {
       const listener = db.collection('users').doc(auth.user.id).collection('domains').doc(domain)
         .onSnapshot(doc => {
           const space = doc.data() as DomainSpace;
-          setDoaminSpace(space);
+          setDomainSpace(space);
+          setPulledAt(space.pulledAt);
           debugToast('fetch [/users/domains]');
         });
       return () => listener();
@@ -118,6 +119,7 @@ const Main: React.FC<{ auth: AuthContextProps }> = ({ auth }) => {
   useEffect(
     () => {
       if (!auth) return;
+      if (!pulledAt) return;
       db.collection('users').doc(auth.user.id).collection('domains').doc(domain).update({
         pulledAt,
       });
