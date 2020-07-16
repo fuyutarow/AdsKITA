@@ -27,8 +27,8 @@ import {
 } from 'models';
 import { AuthContext, AuthContextProps } from 'contexts/auth';
 import AppHeader from 'components/AppHeader';
+import GenEmbedURL from './GenEmbedURL';
 import { head7 } from 'utils';
-import { threadId } from 'worker_threads';
 
 export default () => {
   const auth = useContext(AuthContext);
@@ -359,39 +359,11 @@ const Main: React.FC<{ auth: AuthContextProps }> = ({ auth }) => {
     );
   };
 
-  const GenEmbedURL = () => {
-    const [key, setKey] = useState<string | null>(null);
-    // const [emebedURL, setEmbedURL] = useState<string | null>(null);
-    const embedURL = `https://adskita.now.sh/spaces/${spaceId}/pub?key=${key}`;
-    const iframeHTML =
-      `
-<iframe width=300 height=250 src="${embedURL}"></iframe>
-`;
-
-    if (!auth) return null;
-    return (
-      <div>
-        <div>iframe埋め込み用URL</div>
-        <Button variant='contained' onClick={e => {
-          // const key = uuid();
-          const key = auth.user.id;
-          setKey(key);
-        }}>取得</Button>
-        {key &&
-          <div>
-            <div> {embedURL} </div>
-            <div> {iframeHTML} </div>
-          </div>
-        }
-      </div>
-    );
-  };
-
   return (
     <div>
       <DebugButton onClick={e => {
       }} />
-      <GenEmbedURL />
+      <GenEmbedURL spaceId={spaceId} />
       <div>{Object.keys(pubRecord).length}</div>
       <PubTable />
     </div>
