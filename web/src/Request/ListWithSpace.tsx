@@ -17,7 +17,12 @@ import { css } from 'emotion';
 import { db } from 'plugins/firebase';
 import { debug, DebugButton, debugToast } from 'plugins/debug';
 import { routes } from 'router';
-import { Timestamp, PublishedFlyer, PublishedFlyerWithStatus, PubRecord, DomainSpace } from 'models';
+import {
+  Timestamp,
+  PublishedFlyer, PubRecord,
+  PublishedFlyerWithStatus, PubRecordWithStatus,
+  DomainSpace,
+} from 'models';
 import { AuthContext, AuthContextProps } from 'contexts/auth';
 import AppHeader from 'components/AppHeader';
 import { head7 } from 'utils';
@@ -39,7 +44,7 @@ export default () => {
     );
 };
 
-const AdTile: React.FC<{ flyer: PublishedFlyer }> = ({ flyer }) => {
+const AdTile: React.FC<{ flyer: PublishedFlyerWithStatus }> = ({ flyer }) => {
   const { spaceId } = useParams();
   const history = useHistory();
   const breakpoint = 'L';
@@ -111,13 +116,13 @@ const AdTile: React.FC<{ flyer: PublishedFlyer }> = ({ flyer }) => {
               <div>対象ドメイン: <a href={`//${flyer.targetDoamin}`} target="_blank">{flyer.targetDoamin}</a></div>
               <div style={{ margin: 'auto' }}>
                 <StatusButton children={<DoneIcon />} style={{
-                  backgroundColor: colors.green[500],
+                  backgroundColor: colors.green[flyer.statusPublish === 'going' ? 500 : 100],
                 }} />
                 <StatusButton children={<WarningIcon />} style={{
-                  backgroundColor: colors.amber[500],
+                  backgroundColor: colors.amber[flyer.statusPublish === 'pending' ? 700 : 100],
                 }} />
                 <StatusButton children={<BlockIcon />} style={{
-                  backgroundColor: colors.red[500],
+                  backgroundColor: colors.red[flyer.statusPublish === 'blocked' ? 500 : 100],
                 }} />
               </div>
             </CardContent>
@@ -130,7 +135,7 @@ const AdTile: React.FC<{ flyer: PublishedFlyer }> = ({ flyer }) => {
 
 const Main: React.FC<{ auth: AuthContextProps }> = ({ auth }) => {
   const { spaceId } = useParams();
-  const [pubRecord, setPubRecord] = useState<PubRecord>({});
+  const [pubRecord, setPubRecord] = useState<PubRecordWithStatus>({});
   const [patchPubRecord, setPatchPubRecord] = useState<PubRecord>({});
   const [first, setFirst] = useState(true);
   const domain = decodeURIComponent(spaceId);
@@ -223,8 +228,8 @@ const Main: React.FC<{ auth: AuthContextProps }> = ({ auth }) => {
 
       const listener = db.collection('users').doc(auth.user.id).collection('domains').doc(domain).collection('pubs')
         .onSnapshot(querySnapshot => {
-          const pubList: Array<PublishedFlyer> = querySnapshot.docs.map(doc => {
-            return doc.data() as PublishedFlyer;
+          const pubList: Array<PublishedFlyerWithStatus> = querySnapshot.docs.map(doc => {
+            return doc.data() as PublishedFlyerWithStatus;
           });
           pubList.forEach(pub => {
             pubRecord[pub.pubId] = pub;
@@ -244,7 +249,7 @@ const Main: React.FC<{ auth: AuthContextProps }> = ({ auth }) => {
     return (
       <>
         {Object.values(pubRecord)
-          .filter((x): x is PublishedFlyer => Boolean(x))
+          .filter((x): x is PublishedFlyerWithStatus => Boolean(x))
           .map(pub => <AdTile flyer={pub} />)
         }
       </>
@@ -254,12 +259,6 @@ const Main: React.FC<{ auth: AuthContextProps }> = ({ auth }) => {
   return (
     <div>
       <DebugButton onClick={e => {
-        debug('patch', patchPubRecord);
-        debug('domain space', domainSpace);
-        debug(pubRecord);
-        const ll = Object.values(pubRecord)
-          .filter((x): x is PublishedFlyer => Boolean(x));
-        debug(ll);
       }} />
       <div>{Object.keys(pubRecord).length}</div>
       <PubTable />

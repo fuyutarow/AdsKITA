@@ -23,12 +23,12 @@ export type PublishedFlyer = Flyer & {
   targetDoamin: string;
   createdAt: Timestamp;
 }
+export type PubRecord = Record<PubId, PublishedFlyer | undefined>
 
 export type PublishedFlyerWithStatus = PublishedFlyer & {
   statusPublish: StatusPublish;
 }
-
-export type PubRecord = Record<PubId, PublishedFlyer | undefined>
+export type PubRecordWithStatus = Record<PubId, PublishedFlyerWithStatus | undefined>
 
 export interface UserInfoCore {
   id: UserId;
