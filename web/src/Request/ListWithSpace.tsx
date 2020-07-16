@@ -2,10 +2,15 @@ import moment from 'moment';
 import React, { useState, useEffect, useContext } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
+import { colors } from '@material-ui/core';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
+import Button from '@material-ui/core/Button';
+import DeleteIcon from '@material-ui/icons/Delete';
+import IconButton from '@material-ui/core/IconButton';
+import { css } from 'emotion';
 
 import { db } from 'plugins/firebase';
 import { debug, DebugButton, debugToast } from 'plugins/debug';
@@ -14,6 +19,7 @@ import { Timestamp, PublishedFlyer, PubRecord, DomainSpace } from 'models';
 import { AuthContext, AuthContextProps } from 'contexts/auth';
 import AppHeader from 'components/AppHeader';
 import { head7 } from 'utils';
+import { CardActions } from '@material-ui/core';
 
 export default () => {
   const auth = useContext(AuthContext);
@@ -45,10 +51,11 @@ const AdTile: React.FC<{ flyer: PublishedFlyer }> = ({ flyer }) => {
   };
 
   const cardStyle = (breakpoint: string) => {
+    const width = 200;
     return ['L', 'M'].includes(breakpoint)
       ? {
-        width: 200,
-        height: 200 * 1.6,
+        width,
+        height: width * 1.6,
         borderRadius: '20px',
       }
       : {
@@ -82,6 +89,17 @@ const AdTile: React.FC<{ flyer: PublishedFlyer }> = ({ flyer }) => {
                 : <div>リンクURL: なし </div>
               }
               <div>対象ドメイン: <a href={`//${flyer.targetDoamin}`} target="_blank">{flyer.targetDoamin}</a></div>
+              <div>
+                <IconButton aria-label="delete" style={{
+                  borderRadius: 5,
+                  width: 40,
+                  height: 40,
+                  color: 'white',
+                  backgroundColor: colors.red[500],
+                }}>
+                  <DeleteIcon />
+                </IconButton>
+              </div>
             </CardContent>
           </div>
         </CardActionArea >
