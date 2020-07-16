@@ -171,14 +171,6 @@ const PlateButton: React.FC<{
     : <C />;
 };
 
-const DebugDiv = () => {
-
-  return (
-    <div className={css` border: solid 4px pink; z-index: 99 `} >
-    </div>
-  );
-};
-
 const LeftSideBar: React.FC<{
   variant: 'permanent';
 } | {
@@ -214,7 +206,6 @@ const LeftSideBar: React.FC<{
       onClose={toggleDrawer(false)}
       onOpen={toggleDrawer(false)}
     >
-      {isDevelopment ? <DebugDiv /> : null}
       <List>
         <LogoTitle />
       </List>
@@ -225,6 +216,14 @@ const LeftSideBar: React.FC<{
           icon: <AddCircleIcon style={iconStyle} />,
           to: routes.flyerNew.path,
         }} />
+        <PlateButton {...{
+          value: '出稿中',
+          icon: <ViewModuleIcon style={iconStyle} />,
+          to: routes.flyerNew.path,
+        }} />
+      </List>
+      <Divider />
+      <List>
         <PlateButton {...{
           value: '広告を受ける',
           icon: <DomainIcon style={iconStyle} />,

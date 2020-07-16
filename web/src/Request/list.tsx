@@ -126,7 +126,6 @@ const Main: React.FC<{ auth: AuthContextProps }> = ({ auth }) => {
           .filter((x): x is PublishedFlyer => Boolean(x));
         debug(ll);
       }}/>
-      <div>{Object.keys(pubRecord).length}</div>
       <PubTable />
     </div>
   );

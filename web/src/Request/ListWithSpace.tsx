@@ -358,7 +358,6 @@ const Main: React.FC<{ auth: AuthContextProps }> = ({ auth }) => {
       <DebugButton onClick={e => {
       }} />
       <GenEmbedURL spaceId={spaceId} />
-      <div>{Object.keys(pubRecord).length}</div>
       <PubTable />
     </div>
   );
