@@ -1,19 +1,23 @@
 import React, { createContext, useState, useEffect } from 'react';
 import firebase from 'firebase';
 
-import { UserInfo, Timestamp } from 'models';
-
-import { auth } from 'plugins/firebase';
+import { auth, db } from 'plugins/firebase';
+import { debugToast } from 'plugins/debug';
+import { UserId, UserInfo, Timestamp } from 'models';
+import { head7 } from 'utils';
 
 export interface AuthContextProps {
-  currentUser: UserInfo;
+  firebaseCurrentUser: firebase.User;
+  user: UserInfo;
   signOut: () => void;
 }
 
 const AuthContext = createContext<AuthContextProps | null>(null);
 
 const AuthProvider = ({ children }: any) => {
-  const [value, setValue] = useState<AuthContextProps | null>(null);
+  const [userId, setUserId] = useState<UserId | null>(null);
+  const [firebaseCurrentUser, setFirebaseCurrentUser] = useState<firebase.User | null>(null);
+  const [user, setUser] = useState<UserInfo | null>(null);
 
   const signOut = () => {
     auth.signOut();
@@ -24,22 +28,72 @@ const AuthProvider = ({ children }: any) => {
     auth.onAuthStateChanged((user: firebase.User | null) => {
       if (user) {
         // ユーザがログインしました
-        const currentUser: UserInfo = {
+        const currentUser = {
           id: user.uid,
           displayName: user.displayName,
           providerId: user.providerId,
           photoURL: user.photoURL,
           updatedAt: Timestamp.now(),
+          // visitedThreads: {},
         };
-        // socket.emit('iam', currentUser.uid);
-        setValue({ currentUser, signOut });
+        setFirebaseCurrentUser(user);
+        setUserId(user.uid);
       } else {
         // ユーザがログアウトしました
         // socket.disconnect();
-        setValue(null);
+        setFirebaseCurrentUser(null);
       }
     });
   }, []);
+
+  useEffect(
+    () => {
+      if (!userId) return;
+      if (!firebaseCurrentUser) return;
+      const listener = db.collection('users').doc(userId)
+        .onSnapshot(doc => {
+          const userInfo = doc.data() as UserInfo || null;
+
+          if (userInfo) {
+            const displayName = userInfo.displayName || firebaseCurrentUser.displayName || null;
+            setUser({
+              id: userId,
+              displayName,
+              photoURL: userInfo.photoURL || firebaseCurrentUser.photoURL || null,
+              createdAt: userInfo.createdAt || Timestamp.now(),
+              updatedAt: userInfo.updatedAt || Timestamp.now(),
+              domains: userInfo.domains || [],
+            });
+          } else {
+            // 初見さんいらっしゃい
+            const displayName = firebaseCurrentUser.displayName || null;
+
+            // 新規ユーザのプロフィールをDBプッシュ
+            const user: UserInfo = {
+              id: userId,
+              displayName,
+              photoURL: firebaseCurrentUser.photoURL || null,
+              createdAt: Timestamp.now(),
+              updatedAt: Timestamp.now(),
+              domains: [],
+            };
+            db.collection('users').doc(user.id).set(user);
+
+            setUser(user);
+          }
+
+          debugToast(`fetch user on [userId: ${head7(userId)}]`);
+        });
+      return () => listener();
+    },
+    [firebaseCurrentUser, userId],
+  );
+
+  const value = firebaseCurrentUser && user && {
+    firebaseCurrentUser,
+    signOut,
+    user,
+  } || null;
 
   return (
     <AuthContext.Provider value={value} >

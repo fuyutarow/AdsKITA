@@ -19,14 +19,28 @@ export type PublishedFlyer = Flyer & {
   pubId: PubId;
   numShards: number;
   targetDoamin: string;
+  createdAt: Timestamp;
 }
 
-export interface UserInfo {
+export type PubRecord = Record<PubId, PublishedFlyer | undefined>
+
+export interface UserInfoCore {
   id: UserId;
   displayName: string | null;
   photoURL: string | null;
-  providerId: string;
+}
+
+export type UserInfo = UserInfoCore & {
+  createdAt: Timestamp;
   updatedAt: Timestamp;
+  domains: Array<string>;
+}
+
+export interface DomainSpace {
+  domain: string;
+  ownerId: UserId;
+  createdAt: Timestamp;
+  pulledAt: Timestamp;
 }
 
 export enum TicketStatus {
