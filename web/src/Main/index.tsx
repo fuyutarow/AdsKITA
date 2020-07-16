@@ -16,8 +16,8 @@ import ViewModuleIcon from '@material-ui/icons/ViewModule';
 import DomainIcon from '@material-ui/icons/Domain';
 import { css } from 'emotion';
 
-import { isDevelopment } from 'plugins/env';
 import { useBreakpoint } from 'plugins/breakpoint';
+import { debug } from 'plugins/debug';
 import { brandColors } from 'plugins/brand';
 import { routes } from 'router';
 import { AuthContext, AuthProvider } from 'contexts/auth';

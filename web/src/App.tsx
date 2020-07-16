@@ -5,12 +5,16 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import { AuthProvider } from 'contexts/auth';
 import Main from 'Main';
+import { routes } from 'router';
 
 const App = () => {
   return (
     <AuthProvider>
       <BrowserRouter>
-        <Main/>
+        <Switch>
+          <Route {...routes.pubs} />
+          <Main />
+        </Switch>
       </BrowserRouter>
       <ToastContainer />
     </AuthProvider>
