@@ -1,11 +1,9 @@
 import { v4 as uuid } from 'uuid';
 import React, { useState, useEffect, useContext, useCallback } from 'react';
-import NumberFormat from 'react-number-format';
 
 import { Link, useParams, useHistory } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import { colors } from '@material-ui/core';
-import TextField from '@material-ui/core/TextField';
 
 import { db } from 'plugins/firebase';
 import { toastNotice } from 'plugins/toast';
@@ -13,34 +11,7 @@ import { routes } from 'router';
 import { Flyer, PublishedFlyer, Timestamp } from 'models';
 import { AuthContext } from 'contexts/auth';
 import InputLinkURL, { isValidURL } from './inputLinkURL';
-
-interface NumberFormatCustomProps {
-  inputRef: (instance: NumberFormat | null) => void;
-  onChange: (event: { target: { name: string; value: string } }) => void;
-  name: string;
-}
-
-function NumberFormatCustom(props: NumberFormatCustomProps) {
-  const { inputRef, onChange, ...other } = props;
-
-  return (
-    <NumberFormat
-      {...other}
-      getInputRef={inputRef}
-      onValueChange={(values) => {
-        onChange({
-          target: {
-            name: props.name,
-            value: values.value,
-          },
-        });
-      }}
-      thousandSeparator
-      isNumericString
-      suffix=" 円"
-    />
-  );
-}
+import InputPrice from './InputPrice';
 
 const FC: React.FC<{ flyer: Flyer }> = ({ flyer }) => {
   const history = useHistory();
@@ -116,8 +87,8 @@ const FC: React.FC<{ flyer: Flyer }> = ({ flyer }) => {
   };
 
   const validation = {
-    budget(): boolean {
-      return budget >= 100 && budget <= 1e5;
+    budget(budget: number): boolean {
+      return budget >= 100 && budget <= 1e4;
     },
   };
 
@@ -134,20 +105,15 @@ const FC: React.FC<{ flyer: Flyer }> = ({ flyer }) => {
       </div>
       <div>掲載依頼するドメイン: <a href={`//${hostname}`} target="_blank">{hostname}</a></div>
       <div>予算上限</div>
-      <TextField
-        id="price"
-        label="価格"
-        name="numberformat"
-        variant='outlined'
-        InputProps={{
-          inputComponent: NumberFormatCustom as any,
-        }}
-        value={budget}
-        error={!validation.budget()}
-        onChange={e => {
-          setBudget(Number(e.target.value));
-        }}
-      />
+      <InputPrice {...{
+        price: budget,
+        setPrice: setBudget,
+        validation: validation.budget,
+        label: '予算',
+        helperText: '予算は100円以上・10,000円以下で指定してください',
+        variant: 'outlined',
+      }}/>
+      {budget}
       <div>
         <RequestButton />
       </div>

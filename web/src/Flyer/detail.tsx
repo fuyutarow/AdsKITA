@@ -143,7 +143,6 @@ const NewTicketEditor: React.FC<{ auth: AuthContextProps }> = ({ auth }) => {
           <RequestPart flyer={flyer} />
         </Paper>
       </Container>
-      <AppFooter />
     </>
   );
 };
