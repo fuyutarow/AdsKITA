@@ -11,19 +11,13 @@ import { debug, DebugButton } from 'plugins/debug';
 import { routes } from 'router';
 import { PublishedFlyer, PubRecord } from 'models';
 import { AuthContext, AuthContextProps } from 'contexts/auth';
-import AppHeader from 'components/AppHeader';
 import { head7 } from 'utils';
 
 export default () => {
   const auth = useContext(AuthContext);
 
   return auth
-    ? (
-      <>
-        <AppHeader />
-        <Main auth={auth} />
-      </>
-    )
+    ? <Main auth={auth} />
     : (
       <div>
         ログインしてチケットを出品しよう

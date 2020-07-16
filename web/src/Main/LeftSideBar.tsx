@@ -232,6 +232,12 @@ const LeftSideBar: React.FC<{
         }} />
       </List>
       <Divider />
+      <div className={classes.bottomArea}>
+        <Divider />
+        <List >
+          <AuthAvatarPlate />
+        </List>
+      </div>
     </SwipeableDrawer>
   );
 };

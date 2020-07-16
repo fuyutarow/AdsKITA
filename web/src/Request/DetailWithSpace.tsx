@@ -21,18 +21,12 @@ import { toastNotice } from 'plugins/toast';
 import { routes } from 'router';
 import { PublishedFlyerWithStatus, StatusPublish } from 'models';
 import { AuthContext, AuthProvider, AuthContextProps } from 'contexts/auth';
-import AppHeader from 'components/AppHeader';
 
 export default () => {
   const auth = useContext(AuthContext);
 
   return auth
-    ? (
-      <>
-        <AppHeader />
-        <Main auth={auth} />
-      </>
-    )
+    ? <Main auth={auth} />
     : (
       <div>
         ログインしてチケットを出品しよう
