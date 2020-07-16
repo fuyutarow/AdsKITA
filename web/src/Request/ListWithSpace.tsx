@@ -167,14 +167,24 @@ const AdTile: React.FC<{ flyer: PublishedFlyerWithStatus }> = ({ flyer }) => {
               image={flyer.imageURL}
             />
             <CardContent style={{ height: '100%' }}>
-              <div>id: {head7(flyer.id)}</div>
+              {/* <div>id: {head7(flyer.id)}</div> */}
               {flyer.linkURL
-                ? <div>リンクURL: <a href={flyer.linkURL} target="_blank">{flyer.linkURL}</a></div>
+                ? <div><a href={flyer.linkURL} target="_blank">{flyer.linkURL}</a></div>
                 : <div>リンクURL: なし </div>
               }
-              <div>対象ドメイン: <a href={`//${flyer.targetDoamin}`} target="_blank">{flyer.targetDoamin}</a></div>
+              {/* <div>対象ドメイン: <a href={`//${flyer.targetDoamin}`} target="_blank">{flyer.targetDoamin}</a></div> */}
+              <div>残り掲載日数: {flyer.days} 日</div>
+              <div>予算: {flyer.budget} 円</div>
+              <div>日当予算: {flyer.budgetPerDay.toFixed(1)} 円</div>
               <div style={{ margin: 'auto' }}>
                 <StatusButtonDiv />
+              </div>
+              <div>
+                {
+                  statusPublish === 'going' ? '広告掲載中' :
+                    statusPublish === 'pending' ? '広告掲載を保留' :
+                      statusPublish === 'blocked' ? '広告掲載をブロック' : null
+                }
               </div>
             </CardContent>
           </div>
