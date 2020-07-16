@@ -57,6 +57,7 @@ const InputDomain: React.FC<{
       ownerId: auth.user.id,
       createdAt: Timestamp.now(),
       pulledAt: Timestamp.fromDate(moment('20200123').toDate()),
+      defaultStatusPublish: 'pending',
     };
 
     db.collection('users').doc(auth.user.id).update({

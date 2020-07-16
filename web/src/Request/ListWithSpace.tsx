@@ -17,11 +17,10 @@ import { css } from 'emotion';
 import { db } from 'plugins/firebase';
 import { debug, DebugButton, debugToast } from 'plugins/debug';
 import { routes } from 'router';
-import { Timestamp, PublishedFlyer, PubRecord, DomainSpace } from 'models';
+import { Timestamp, PublishedFlyer, PublishedFlyerWithStatus, PubRecord, DomainSpace } from 'models';
 import { AuthContext, AuthContextProps } from 'contexts/auth';
 import AppHeader from 'components/AppHeader';
 import { head7 } from 'utils';
-import { CardActions } from '@material-ui/core';
 
 export default () => {
   const auth = useContext(AuthContext);
@@ -201,16 +200,21 @@ const Main: React.FC<{ auth: AuthContextProps }> = ({ auth }) => {
   // その差分のpubだけを /users/:id/domains/:id/pubs にプッシュ
   useEffect(
     () => {
+      if (!domainSpace) return;
       Object.values(patchPubRecord)
         .filter((x): x is PublishedFlyer => Boolean(x))
         .forEach(pub => {
+          const pubWithStatus: PublishedFlyerWithStatus = {
+            ...pub,
+            statusPublish: domainSpace.defaultStatusPublish,
+          };
           db.collection('users').doc(auth.user.id).collection('domains').doc(domain).collection('pubs').doc(pub.pubId).set(
-            pub,
+            pubWithStatus,
             { merge: true },
           );
         });
     },
-    [auth.user.id, domain, patchPubRecord],
+    [auth.user.id, domain, domainSpace, patchPubRecord],
   );
 
   useEffect(
