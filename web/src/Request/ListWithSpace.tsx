@@ -97,47 +97,63 @@ const Main: React.FC<{ auth: AuthContextProps }> = ({ auth }) => {
   const [first, setFirst] = useState(true);
   const domain = decodeURIComponent(spaceId);
   const [domainSpace, setDoaminSpace] = useState<DomainSpace | null>(null);
+  const [pulledAt, setPulledAt] = useState<Timestamp | null>(null);
 
+  // fetch /users/:id/domains on init
   useEffect(
     () => {
-      if (!domainSpace) return;
-      const listener = db.collection('domains').doc(domain).collection('pubs')
-        .where('createdAt', '>', moment(domainSpace.pulledAt).toDate())
-        .onSnapshot(querySnapshot => {
-          const pulledAt = Timestamp.now();
-
-          const pubList: Array<PublishedFlyer> = querySnapshot.docs.map(doc => {
-            return doc.data() as PublishedFlyer;
-          });
-          const record: PubRecord = {};
-
-          pubList.forEach(pub => {
-            record[pub.pubId] = pub;
-            debugToast(`fetch [/domains/pubs/:${pub.pubId}]`);
-          });
-          setPatchPubRecord(record);
-          setDoaminSpace({
-            ...domainSpace,
-            pulledAt,
-          });
-
-          // 再描画を誘う
-          setFirst(false);
+      if (!auth) return;
+      const listener = db.collection('users').doc(auth.user.id).collection('domains').doc(domain)
+        .onSnapshot(doc => {
+          const space = doc.data() as DomainSpace;
+          setDoaminSpace(space);
+          debugToast('fetch [/users/domains]');
         });
       return () => listener();
     },
-    [domain, domainSpace],
+    [auth, domain],
   );
 
   // push /users/:id/domains on updating pulledAt
   useEffect(
     () => {
       if (!auth) return;
-      if (!domainSpace) return;
-      db.collection('users').doc(auth.user.id).collection('domains').doc(domain).update(domainSpace);
+      db.collection('users').doc(auth.user.id).collection('domains').doc(domain).update({
+        pulledAt,
+      });
       debugToast('push /users/domains', { color: 'blue' });
     },
-    [auth, domain, domainSpace],
+    [auth, domain, pulledAt],
+  );
+
+  useEffect(
+    () => {
+      if (!pulledAt) return;
+      const listener = db.collection('domains').doc(domain).collection('pubs')
+        .where('createdAt', '>', pulledAt.toDate())
+        .onSnapshot(querySnapshot => {
+          const pubList: Array<PublishedFlyer> = querySnapshot.docs.map(doc => {
+            return doc.data() as PublishedFlyer;
+          });
+
+          if (pubList.length === 0) return;
+          const pulledAt = Timestamp.now();
+
+          const record: PubRecord = {};
+
+          pubList.forEach(pub => {
+            record[pub.pubId] = pub;
+            debugToast(`fetch [/domains/pubs/:${head7(pub.pubId)}]`);
+          });
+          setPatchPubRecord(record);
+          setPulledAt(pulledAt);
+
+          // 再描画を誘う
+          setFirst(false);
+        });
+      return () => listener();
+    },
+    [domain, domainSpace, pulledAt],
   );
 
   // /domains/:id/pubs のレプリカを /users/:id/domains/:id/pubs に移す
@@ -167,6 +183,7 @@ const Main: React.FC<{ auth: AuthContextProps }> = ({ auth }) => {
           });
           pubList.forEach(pub => {
             pubRecord[pub.pubId] = pub;
+            debugToast(`fetch [/users/domains/pubs/:${head7(pub.pubId)}]`);
           });
           setPubRecord(pubRecord);
 
@@ -192,6 +209,8 @@ const Main: React.FC<{ auth: AuthContextProps }> = ({ auth }) => {
   return (
     <div>
       <DebugButton onClick={e => {
+        debug('patch', patchPubRecord);
+        debug('domain space', domainSpace);
         debug(pubRecord);
         const ll = Object.values(pubRecord)
           .filter((x): x is PublishedFlyer => Boolean(x));
