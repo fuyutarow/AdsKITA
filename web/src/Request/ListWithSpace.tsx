@@ -1,3 +1,4 @@
+import { v4 as uuid } from 'uuid';
 import moment from 'moment';
 import React, { useState, useEffect, useContext } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
@@ -358,10 +359,39 @@ const Main: React.FC<{ auth: AuthContextProps }> = ({ auth }) => {
     );
   };
 
+  const GenEmbedURL = () => {
+    const [key, setKey] = useState<string | null>(null);
+    // const [emebedURL, setEmbedURL] = useState<string | null>(null);
+    const embedURL = `https://adskita.now.sh/spaces/${spaceId}/pub?key=${key}`;
+    const iframeHTML =
+      `
+<iframe width=300 height=250 src="${embedURL}"></iframe>
+`;
+
+    if (!auth) return null;
+    return (
+      <div>
+        <div>iframe埋め込み用URL</div>
+        <Button variant='contained' onClick={e => {
+          // const key = uuid();
+          const key = auth.user.id;
+          setKey(key);
+        }}>取得</Button>
+        {key &&
+          <div>
+            <div> {embedURL} </div>
+            <div> {iframeHTML} </div>
+          </div>
+        }
+      </div>
+    );
+  };
+
   return (
     <div>
       <DebugButton onClick={e => {
       }} />
+      <GenEmbedURL />
       <div>{Object.keys(pubRecord).length}</div>
       <PubTable />
     </div>
