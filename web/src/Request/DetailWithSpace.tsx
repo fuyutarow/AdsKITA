@@ -20,7 +20,7 @@ import { db } from 'plugins/firebase';
 import { debug } from 'plugins/debug';
 import { toastNotice } from 'plugins/toast';
 import { routes } from 'router';
-import { Flyer, PublishedFlyer } from 'models';
+import { PublishedFlyerWithStatus, StatusPublish } from 'models';
 import { AuthContext, AuthProvider, AuthContextProps } from 'contexts/auth';
 import AppHeader from 'components/AppHeader';
 
@@ -46,7 +46,7 @@ const Main: React.FC<{ auth: AuthContextProps }> = ({ auth }) => {
   const domain = decodeURIComponent(spaceId);
   const history = useHistory();
   const { pubId } = useParams();
-  const [flyer, setFlyer] = useState<PublishedFlyer | null>(null);
+  const [flyer, setFlyer] = useState<PublishedFlyerWithStatus | null>(null);
 
   useEffect(
     () => {
@@ -55,7 +55,7 @@ const Main: React.FC<{ auth: AuthContextProps }> = ({ auth }) => {
       debug(auth, domain, pubId);
       const listener = db.collection('users').doc(auth.user.id).collection('domains').doc(domain).collection('pubs').doc(pubId)
         .onSnapshot(doc => {
-          const pubed = doc.data() as PublishedFlyer || null;
+          const pubed = doc.data() as PublishedFlyerWithStatus || null;
           setFlyer(pubed);
         });
       return () => listener();
@@ -67,7 +67,8 @@ const Main: React.FC<{ auth: AuthContextProps }> = ({ auth }) => {
     style?: React.CSSProperties | undefined;
     value: string;
     startIcon?: React.ReactNode | undefined;
-  }> = ({ style, value, startIcon }) => {
+    onClick?: ((event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void) | undefined;
+  }> = ({ style, value, startIcon, onClick }) => {
     return (
       <Button
         startIcon={startIcon}
@@ -78,9 +79,65 @@ const Main: React.FC<{ auth: AuthContextProps }> = ({ auth }) => {
           color: 'white',
           ...style,
         }}
+        onClick={onClick}
       >
         {value}
       </Button>
+    );
+  };
+
+  const StatusButtonDiv: React.FC<{ flyer: PublishedFlyerWithStatus }> = ({ flyer }) => {
+    const [statusPublish, setStatusPublish] = useState<StatusPublish>(flyer.statusPublish);
+
+    useEffect(
+      () => {
+        if (!auth) return;
+        db.collection('users').doc(auth.user.id).collection('domains').doc(domain).collection('pubs').doc(flyer.pubId).update({
+          statusPublish,
+        });
+      },
+      [flyer.pubId, statusPublish],
+    );
+
+    return (
+      <>
+        <StatusButton startIcon={<DoneIcon />}
+          value="掲載"
+          style={statusPublish === 'going'
+            ? { backgroundColor: colors.green[500] }
+            : { backgroundColor: colors.green[50], border: 'solid 1px green' }
+          }
+          onClick={e => {
+            e.stopPropagation();
+            // if (statusPublish !== 'going') return;
+            setStatusPublish('going');
+          }}
+        />
+        <StatusButton startIcon={<WarningIcon />}
+          value="保留"
+          style={statusPublish === 'pending'
+            ? { backgroundColor: colors.amber[500] }
+            : { backgroundColor: colors.amber[100], border: `solid 1px ${colors.amber[500]}` }
+          }
+          onClick={e => {
+            e.stopPropagation();
+            // if (statusPublish !== 'pending') return;
+            setStatusPublish('pending');
+          }}
+        />
+        <StatusButton startIcon={<BlockIcon />}
+          value="ブロック"
+          style={statusPublish === 'blocked'
+            ? { backgroundColor: colors.red[500] }
+            : { backgroundColor: colors.red[50], border: 'solid 1px red' }
+          }
+          onClick={e => {
+            e.stopPropagation();
+            // if (statusPublish !== 'blocked') return;
+            setStatusPublish('blocked');
+          }}
+        />
+      </>
     );
   };
 
@@ -116,15 +173,7 @@ const Main: React.FC<{ auth: AuthContextProps }> = ({ auth }) => {
           <div>このドメインに広告の掲載を依頼しています</div>
           <div>掲載依頼するドメイン: <a href={`//${flyer.targetDoamin}`} target="_blank">{flyer.targetDoamin}</a></div>
           <div style={{ margin: 'auto' }}>
-            <StatusButton startIcon={<DoneIcon />} value='掲載' style={{
-              backgroundColor: colors.green[500],
-            }} />
-            <StatusButton startIcon={<WarningIcon />} value="保留" style={{
-              backgroundColor: colors.amber[500],
-            }} />
-            <StatusButton startIcon={<BlockIcon />} value='ブロック' style={{
-              backgroundColor: colors.red[500],
-            }} />
+            <StatusButtonDiv flyer={flyer} />
           </div>
         </div>
       </Paper>
