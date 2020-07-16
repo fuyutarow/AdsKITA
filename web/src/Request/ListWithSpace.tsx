@@ -10,6 +10,9 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import DeleteIcon from '@material-ui/icons/Delete';
 import IconButton from '@material-ui/core/IconButton';
+import BlockIcon from '@material-ui/icons/Block';
+import DoneIcon from '@material-ui/icons/Done';
+import WarningIcon from '@material-ui/icons/Warning';
 import { css } from 'emotion';
 
 import { db } from 'plugins/firebase';
@@ -67,6 +70,22 @@ const AdTile: React.FC<{ flyer: PublishedFlyer }> = ({ flyer }) => {
       };
   };
 
+  const StatusButton: React.FC<{
+    style?: React.CSSProperties | undefined;
+  }> = ({ style, children }) => {
+    return (
+      <IconButton style={{
+        margin: 5,
+        borderRadius: 5,
+        width: 40,
+        height: 40,
+        color: 'white',
+        ...style,
+      }}>
+        {children}
+      </IconButton>
+    );
+  };
   return (
     <div style={cardPadding(breakpoint)}>
       <Card style={cardStyle(breakpoint)}>
@@ -89,16 +108,16 @@ const AdTile: React.FC<{ flyer: PublishedFlyer }> = ({ flyer }) => {
                 : <div>リンクURL: なし </div>
               }
               <div>対象ドメイン: <a href={`//${flyer.targetDoamin}`} target="_blank">{flyer.targetDoamin}</a></div>
-              <div>
-                <IconButton aria-label="delete" style={{
-                  borderRadius: 5,
-                  width: 40,
-                  height: 40,
-                  color: 'white',
+              <div style={{ margin: 'auto' }}>
+                <StatusButton children={<DoneIcon />} style={{
+                  backgroundColor: colors.green[500],
+                }} />
+                <StatusButton children={<WarningIcon />} style={{
+                  backgroundColor: colors.amber[500],
+                }} />
+                <StatusButton children={<BlockIcon />} style={{
                   backgroundColor: colors.red[500],
-                }}>
-                  <DeleteIcon />
-                </IconButton>
+                }} />
               </div>
             </CardContent>
           </div>
