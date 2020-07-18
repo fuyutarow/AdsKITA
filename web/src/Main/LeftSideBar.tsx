@@ -34,6 +34,8 @@ import { routes } from 'router';
 import './style.css';
 import style from './style.module.css';
 
+import { logo, icons } from 'plugins/brand';
+
 const drawerWidth = 240;
 
 const iconStyle = { fontSize: '45px', color: brandColors.khaki };
@@ -85,7 +87,7 @@ const LogoTitle = () => {
     <Link to={routes.home.path}>
       <ListItem>
         <ListItemIcon>
-          <img src="/icons/192x192.png" height="36px" style={{
+          <img src={icons[192]} height="36px" style={{
             position: 'relative',
             left: 3,
             top: 5,
