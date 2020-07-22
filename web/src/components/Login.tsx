@@ -8,6 +8,7 @@ import Stripe from 'stripe';
 import { auth, functions } from 'plugins/firebase';
 import { debug, DebugButton } from 'plugins/debug';
 import { config as stripeConfig, badge as stripeBadge } from 'plugins/stripe';
+import { stripe } from 'plugins/stripe-functions';
 
 import Button from '@material-ui/core/Button';
 
@@ -54,11 +55,10 @@ export default () => {
         }} />
         <DebugButton children="account retrieve" onClick={async e => {
           console.log('oiiio');
-          const acc = await retrieve({
+          const account = await stripe.accounts.retrieve({
             id: 'acct_1H6EpFL2CNVURAeA',
           });
           debug('okko');
-          const account = acc.data as Stripe.Account;
           debug(account);
         }} />
       </div>
