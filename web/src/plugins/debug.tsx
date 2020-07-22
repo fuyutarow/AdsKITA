@@ -6,7 +6,7 @@ import { css } from 'emotion';
 
 import { isDevelopment, isStaging, notifyAutoClose as autoClose } from 'plugins/env';
 
-export const debug = isDevelopment && isStaging
+export const debug = isDevelopment || isStaging
   ? console.log
   : (...data: Array<any>) => { };
 

@@ -3,6 +3,7 @@ import { StyledFirebaseAuth } from 'react-firebaseui';
 import { useHistory } from 'react-router-dom';
 // import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import firebase from 'firebase';
+import Stripe from 'stripe';
 
 import { auth, functions } from 'plugins/firebase';
 import { debug, DebugButton } from 'plugins/debug';
@@ -10,7 +11,8 @@ import { config as stripeConfig, badge as stripeBadge } from 'plugins/stripe';
 
 import Button from '@material-ui/core/Button';
 
-const retrieve = functions.httpsCallable('retireve');
+const noticeme = functions.httpsCallable('notice');
+const retrieve = functions.httpsCallable('accountsRetrieve');
 
 const uiConfig = {
   signInFlow: 'popup',
@@ -47,11 +49,17 @@ export default () => {
           </span>
           <img src={stripeBadge} />
         </Button>
-        <DebugButton children="retrieve" onClick={e => {
-          const acc = retrieve({
+        <DebugButton children="notice" onClick={e => {
+          noticeme();
+        }} />
+        <DebugButton children="account retrieve" onClick={async e => {
+          console.log('oiiio');
+          const acc = await retrieve({
             id: 'acct_1H6EpFL2CNVURAeA',
           });
-          debug(acc);
+          debug('okko');
+          const account = acc.data as Stripe.Account;
+          debug(account);
         }} />
       </div>
     </>
