@@ -1,14 +1,4 @@
-// NOTE
-// どうもtsconfigで
-// {
-//   "compilerOptions": {
-//     "module": "commonjs",
-// }
-// でないと動かない
-
 import Stripe from 'stripe';
-
-export const badge = '/stripe/badge.png';
 
 export const config = {
   ca: 'ca_HfaNc9U8GWsiXv6FPEGfb4SRsgjaHYyE',
@@ -23,3 +13,10 @@ export const stripe = new Stripe(
     apiVersion: '2020-03-02',
   },
 );
+
+(async () => {
+  const acc = await stripe.accounts.retrieve(
+    'acct_1H6EpFL2CNVURAeA',
+  );
+  console.log(acc);
+})();
