@@ -6,7 +6,7 @@ import { css } from 'emotion';
 
 import { isDevelopment, isStaging, notifyAutoClose as autoClose } from 'plugins/env';
 
-export const debug = isDevelopment
+export const debug = isDevelopment && isStaging
   ? console.log
   : (...data: Array<any>) => { };
 
@@ -36,9 +36,8 @@ export const debugToast = (
 
 export const DebugButton: React.FC<{
   onClick?: ((event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void) | undefined;
-  value?: string | undefined;
-}> = ({ onClick, value }) => {
+}> = ({ onClick, children }) => {
   return isDevelopment || isStaging
-    ? <button onClick={onClick}>{value ? value : 'debug'}</button>
+    ? <button onClick={onClick}>{children ? children : 'debug'}</button>
     : null;
 };

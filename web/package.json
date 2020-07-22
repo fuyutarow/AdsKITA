@@ -1,6 +1,6 @@
 {
   "name": "adskita",
-  "version": "0.202007.10-connect",
+  "version": "0.202007.10-fire",
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.11.0",
@@ -38,6 +38,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "deploy": "firebase deploy --only hosting",
     "build": "GENERATE_SOURCEMAP=false react-scripts build",
     "build:CI": "CI= npm run build",
     "test": "react-scripts test",
