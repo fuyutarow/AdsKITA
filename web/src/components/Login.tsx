@@ -53,12 +53,14 @@ export default () => {
         <DebugButton children="notice" onClick={e => {
           noticeme();
         }} />
-        <DebugButton children="account retrieve" onClick={async e => {
-          console.log('oiiio');
+        <DebugButton children="accounts create" onClick={async e => {
+          const account = await stripe.accounts.create({});
+          debug(account);
+        }} />
+        <DebugButton children="accounts retrieve" onClick={async e => {
           const account = await stripe.accounts.retrieve({
             id: 'acct_1H6EpFL2CNVURAeA',
           });
-          debug('okko');
           debug(account);
         }} />
       </div>
