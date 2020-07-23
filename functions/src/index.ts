@@ -21,12 +21,10 @@ export const notice = functions.https.onCall((data, context) => {
   return { data: 'Ok' };
 });
 
-export const helloWorld = functions.https.onRequest((request, response) => {
-  response.send('Hello from Firebase!');
-});
-
+import { paymentIntents } from './paymentIntents';
 import { accounts } from './accounts';
 
 export const stripe = {
+  paymentIntents,
   accounts,
 };

@@ -91,4 +91,3 @@ export const accounts = {
   deletePerson,
   listPersons,
 };
-
