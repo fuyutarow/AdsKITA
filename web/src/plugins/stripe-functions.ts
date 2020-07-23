@@ -34,6 +34,37 @@ const accounts = {
     return await functions.httpsCallable('stripe-accounts-retrieve')(data)
       .then(r => wrapThrow<Stripe.Account>(r));
   },
+  update: async (data: {
+    id: string;
+    params?: Stripe.AccountUpdateParams | undefined;
+    options?: Stripe.RequestOptions | undefined;
+  }) => {
+    return await functions.httpsCallable('stripe-accounts-retrieve')(data)
+      .then(r => wrapThrow<Stripe.Account>(r));
+  },
+  del: async (data: {
+    id: string;
+    params?: Stripe.AccountDeleteParams | undefined;
+    options?: Stripe.RequestOptions | undefined;
+  }) => {
+    return await functions.httpsCallable('stripe-accounts-retrieve')(data)
+      .then(r => wrapThrow<Stripe.Account>(r));
+  },
+  reject: async (data: {
+    id: string;
+    params: Stripe.AccountRejectParams;
+    options?: Stripe.RequestOptions | undefined;
+  }) => {
+    return await functions.httpsCallable('stripe-accounts-retrieve')(data)
+      .then(r => wrapThrow<Stripe.Account>(r));
+  },
+  list: async (data: {
+    params?: Stripe.AccountListParams | undefined;
+    options?: Stripe.RequestOptions | undefined;
+  }) => {
+    return await functions.httpsCallable('stripe-accounts-retrieve')(data)
+      .then(r => wrapThrow<Stripe.Account>(r));
+  },
 };
 
 export const stripe = {

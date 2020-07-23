@@ -54,8 +54,17 @@ export default () => {
           noticeme();
         }} />
         <DebugButton children="accounts create" onClick={async e => {
-          const account = await stripe.accounts.create({})
-            .catch(err => { console.log(err); });
+          const account = await stripe.accounts.create({
+            params: {
+              type: 'custom',
+              country: 'US',
+              email: 'jenny.rosen@example.com',
+              requested_capabilities: [
+                'card_payments',
+                'transfers',
+              ],
+            },
+          });
           debug(account);
         }} />
         <DebugButton children="accounts retrieve" onClick={async e => {
