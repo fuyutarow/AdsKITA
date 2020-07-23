@@ -14,6 +14,7 @@ import SpaceList from 'Space/List';
 import SpacePub from 'Space/Pub';
 import PublishedFlyer from 'Request/published';
 import Lab from 'views/Lab';
+import PayView from 'PayView';
 import LabLink from 'views/Lab/link';
 import Redirect from 'redirect';
 import LoginView from 'views/LoginView';
@@ -28,6 +29,11 @@ export const routes = {
   login: {
     path: '/login',
     component: LoginView,
+  },
+  pay: {
+    exact: true,
+    path: '/pay',
+    component: PayView,
   },
   lab: {
     exact: true,
