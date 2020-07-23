@@ -51,6 +51,54 @@ const list = async (data: {
     .then(r => wrapThrow<Stripe.Account>(r));
 };
 
+const createPerson = async (data: {
+  id: string;
+  params?: Stripe.PersonCreateParams | undefined;
+  options?: Stripe.RequestOptions | undefined;
+}) => {
+  return await functions.httpsCallable('stripe-accounts-createPerson')(data)
+    .then(r => wrapThrow<Stripe.Account>(r));
+};
+
+const retrievePerson = async (data: {
+  accountId: string;
+  id: string;
+  params?: Stripe.PersonRetrieveParams | undefined;
+  options?: Stripe.RequestOptions | undefined;
+}) => {
+  return await functions.httpsCallable('stripe-accounts-retrievePerson')(data)
+    .then(r => wrapThrow<Stripe.Account>(r));
+};
+
+const updatePerson = async (data: {
+  accountId: string;
+  id: string;
+  params?: Stripe.PersonUpdateParams | undefined;
+  options?: Stripe.RequestOptions | undefined;
+}) => {
+  return await functions.httpsCallable('stripe-accounts-updatePerson')(data)
+    .then(r => wrapThrow<Stripe.Account>(r));
+};
+
+const deletePerson = async (data: {
+  accountId: string;
+  id: string;
+  params?: Stripe.PersonDeleteParams | undefined;
+  options?: Stripe.RequestOptions | undefined;
+}) => {
+  return await functions.httpsCallable('stripe-accounts-deletePerson')(data)
+    .then(r => wrapThrow<Stripe.Account>(r));
+};
+
+const listPersons = async (data: {
+  id: string;
+  params?: Stripe.PersonListParams | undefined;
+  options?: Stripe.RequestOptions | undefined;
+}) => {
+  return await functions.httpsCallable('stripe-accounts-listPersons')(data)
+    .then(r => wrapThrow<Stripe.Account>(r));
+};
+
 export const accounts = {
   create,
   retrieve,
@@ -58,4 +106,9 @@ export const accounts = {
   del,
   reject,
   list,
+  createPerson,
+  retrievePerson,
+  updatePerson,
+  deletePerson,
+  listPersons,
 };
