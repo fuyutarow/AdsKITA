@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyledFirebaseAuth } from 'react-firebaseui';
 import { useHistory } from 'react-router-dom';
 // import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
@@ -31,75 +31,10 @@ const uiConfig = {
 };
 
 export default () => {
-  const history = useHistory();
 
   return (
-    <>
-      <div>
-        <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={auth} />
-      </div>
-      <div >
-        <Button
-          variant='contained'
-          onClick={e => {
-            window.location.href = `https://connect.stripe.com/oauth/authorize?response_type=code&client_id=${stripeConfig.ca}&scope=read_write`;
-          }}
-        >
-          <span style={{ padding: '0 10px 0 0' }}>
-            決済
-          </span>
-          <img src={stripeBadge} />
-        </Button>
-        <hr />
-        <DebugButton children="accounts create" onClick={async e => {
-          const account = await stripe.accounts.create({
-            country: 'JP',
-            type: 'custom',
-            requested_capabilities: ['card_payments', 'transfers'],
-          });
-          debug(account);
-        }} />
-        <div>accountId: {accountId}</div>
-        <DebugButton onClick={e => {
-          debug(customer);
-
-        }} />
-        <hr />
-        <DebugButton children="notice" onClick={e => {
-          noticeme();
-        }} />
-        <DebugButton children="accounts create" onClick={async e => {
-          const account = await stripe.accounts.create({
-            type: 'custom',
-            country: 'US',
-            email: 'jenny.rosen@example.com',
-            requested_capabilities: [
-              'card_payments',
-              'transfers',
-            ],
-          });
-          debug(account);
-        }} />
-        <DebugButton children="accounts retrieve" onClick={async e => {
-          const account = await stripe.accounts.retrieve(
-            'acct_1H6EpFL2CNVURAeA',
-          );
-          debug(account);
-        }} />
-        <DebugButton children="accounts update" onClick={async e => {
-          const account = await stripe.accounts.update(
-            'acct_1H6EpFL2CNVURAeA',
-            { metadata: { order_id: '6735' } },
-          );
-          debug(account);
-        }} />
-        <DebugButton children="accounts del" onClick={async e => {
-          const account = await stripe.accounts.del(
-            'acct_1H6EpFL2CNVURAeA',
-          );
-          debug(account);
-        }} />
-      </div>
-    </>
+    <div>
+      <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={auth} />
+    </div>
   );
 };
