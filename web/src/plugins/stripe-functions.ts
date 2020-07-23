@@ -39,7 +39,7 @@ const accounts = {
     params?: Stripe.AccountUpdateParams | undefined;
     options?: Stripe.RequestOptions | undefined;
   }) => {
-    return await functions.httpsCallable('stripe-accounts-retrieve')(data)
+    return await functions.httpsCallable('stripe-accounts-update')(data)
       .then(r => wrapThrow<Stripe.Account>(r));
   },
   del: async (data: {
@@ -47,7 +47,7 @@ const accounts = {
     params?: Stripe.AccountDeleteParams | undefined;
     options?: Stripe.RequestOptions | undefined;
   }) => {
-    return await functions.httpsCallable('stripe-accounts-retrieve')(data)
+    return await functions.httpsCallable('stripe-accounts-del')(data)
       .then(r => wrapThrow<Stripe.Account>(r));
   },
   reject: async (data: {
@@ -55,14 +55,14 @@ const accounts = {
     params: Stripe.AccountRejectParams;
     options?: Stripe.RequestOptions | undefined;
   }) => {
-    return await functions.httpsCallable('stripe-accounts-retrieve')(data)
+    return await functions.httpsCallable('stripe-accounts-reject')(data)
       .then(r => wrapThrow<Stripe.Account>(r));
   },
   list: async (data: {
     params?: Stripe.AccountListParams | undefined;
     options?: Stripe.RequestOptions | undefined;
   }) => {
-    return await functions.httpsCallable('stripe-accounts-retrieve')(data)
+    return await functions.httpsCallable('stripe-accounts-list')(data)
       .then(r => wrapThrow<Stripe.Account>(r));
   },
 };

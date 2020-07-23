@@ -73,6 +73,19 @@ export default () => {
           });
           debug(account);
         }} />
+        <DebugButton children="accounts update" onClick={async e => {
+          const account = await stripe.accounts.update({
+            id: 'acct_1H6EpFL2CNVURAeA',
+            params: { metadata: { order_id: '6735' } },
+          });
+          debug(account);
+        }} />
+        <DebugButton children="accounts del" onClick={async e => {
+          const account = await stripe.accounts.del({
+            id: 'acct_1H6EpFL2CNVURAeA',
+          });
+          debug(account);
+        }} />
       </div>
     </>
   );
