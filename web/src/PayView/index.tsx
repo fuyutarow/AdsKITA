@@ -8,6 +8,44 @@ import { stripe } from 'plugins/stripe-functions';
 
 import Button from '@material-ui/core/Button';
 
+import { Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
+import CheckoutForm from './CheckoutForm';
+import { Container } from '@material-ui/core';
+
+const stripePromise = loadStripe(stripeConfig.publicKey);
+
+const CheckComponent = () => {
+  const [paymentIntent, setPaymentIntent] = useState<Stripe.PaymentIntent | null>(null);
+  const clientSecret = paymentIntent && paymentIntent.client_secret;
+  const accountId = 'acct_1H6MjGAYV5ArU4EY';
+  return (
+    <div>
+      <DebugButton
+        children='create payment intent'
+        onClick={async e => {
+          const paymentIntent = await stripe.paymentIntents.create({
+            payment_method_types: ['card'],
+            amount: 1000,
+            currency: 'jpy',
+            transfer_data: {
+              amount: 877,
+              destination: accountId,
+            },
+          });
+          debug('payment intent', paymentIntent);
+          setPaymentIntent(paymentIntent);
+        }}
+      />
+      <Elements stripe={stripePromise}>
+        {clientSecret &&
+          <CheckoutForm clientSecret={clientSecret} />
+        }
+      </Elements>
+    </div>
+  );
+};
+
 export default () => {
   const history = useHistory();
   const [stripeClient, setStripeClient] = useState<Stripe | null>(null);
@@ -44,7 +82,9 @@ export default () => {
   // );
 
   return (
-    <>
+    <Container maxWidth='sm'>
+      <CheckComponent />
+      <hr />
       <div>payment intents </div>
       < DebugButton children="charge to platform and transfer from platform to co-account" onClick={async e => {
         const paymentIntent = await stripe.paymentIntents.create({
@@ -59,9 +99,7 @@ export default () => {
       }
       } />
       < hr />
-      <div>
-        <img src="https://stripe.com/img/docs/connect/application_fee_amount.svg" />
-      </div>
+      <img width="80%" src="https://stripe.com/img/docs/connect/application_fee_amount.svg" />
       < DebugButton children="pay from co-account to platforma as application fee" onClick={async e => {
         const paymentIntent = await stripe.paymentIntents.create({
           payment_method_types: ['card'],
@@ -120,6 +158,6 @@ export default () => {
         );
         debug(account);
       }} />
-    </>
+    </Container>
   );
 };
