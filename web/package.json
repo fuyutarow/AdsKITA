@@ -21,6 +21,7 @@
     "is-url": "^1.2.4",
     "js-base64": "^3.2.4",
     "moment": "^2.27.0",
+    "neverthrow": "^2.7.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-dropzone": "^11.0.2",

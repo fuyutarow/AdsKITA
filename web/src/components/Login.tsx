@@ -54,7 +54,8 @@ export default () => {
           noticeme();
         }} />
         <DebugButton children="accounts create" onClick={async e => {
-          const account = await stripe.accounts.create({});
+          const account = await stripe.accounts.create({})
+            .catch(err => { console.log(err); });
           debug(account);
         }} />
         <DebugButton children="accounts retrieve" onClick={async e => {
