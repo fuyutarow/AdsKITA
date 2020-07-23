@@ -50,40 +50,53 @@ export default () => {
           </span>
           <img src={stripeBadge} />
         </Button>
+        <hr />
+        <DebugButton children="accounts create" onClick={async e => {
+          const account = await stripe.accounts.create({
+            country: 'JP',
+            type: 'custom',
+            requested_capabilities: ['card_payments', 'transfers'],
+          });
+          debug(account);
+        }} />
+        <div>accountId: {accountId}</div>
+        <DebugButton onClick={e => {
+          debug(customer);
+
+        }} />
+        <hr />
         <DebugButton children="notice" onClick={e => {
           noticeme();
         }} />
         <DebugButton children="accounts create" onClick={async e => {
           const account = await stripe.accounts.create({
-            params: {
-              type: 'custom',
-              country: 'US',
-              email: 'jenny.rosen@example.com',
-              requested_capabilities: [
-                'card_payments',
-                'transfers',
-              ],
-            },
+            type: 'custom',
+            country: 'US',
+            email: 'jenny.rosen@example.com',
+            requested_capabilities: [
+              'card_payments',
+              'transfers',
+            ],
           });
           debug(account);
         }} />
         <DebugButton children="accounts retrieve" onClick={async e => {
-          const account = await stripe.accounts.retrieve({
-            id: 'acct_1H6EpFL2CNVURAeA',
-          });
+          const account = await stripe.accounts.retrieve(
+            'acct_1H6EpFL2CNVURAeA',
+          );
           debug(account);
         }} />
         <DebugButton children="accounts update" onClick={async e => {
-          const account = await stripe.accounts.update({
-            id: 'acct_1H6EpFL2CNVURAeA',
-            params: { metadata: { order_id: '6735' } },
-          });
+          const account = await stripe.accounts.update(
+            'acct_1H6EpFL2CNVURAeA',
+            { metadata: { order_id: '6735' } },
+          );
           debug(account);
         }} />
         <DebugButton children="accounts del" onClick={async e => {
-          const account = await stripe.accounts.del({
-            id: 'acct_1H6EpFL2CNVURAeA',
-          });
+          const account = await stripe.accounts.del(
+            'acct_1H6EpFL2CNVURAeA',
+          );
           debug(account);
         }} />
       </div>
