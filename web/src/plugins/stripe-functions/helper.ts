@@ -11,7 +11,7 @@ export const wrapResult = <T>(r: firebase.functions.HttpsCallableResult) => {
 
 export const wrapThrow = <T>(r: firebase.functions.HttpsCallableResult) => {
   if (r.data.type === 'ok') {
-    return r.data.value;
+    return r.data.value as T;
   } else {
     throw r.data.error;
   }
