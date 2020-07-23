@@ -10,23 +10,29 @@ const wrapResult = <T>(r: firebase.functions.HttpsCallableResult) => {
   return result;
 };
 
+const wrapThrow = <T>(r: firebase.functions.HttpsCallableResult) => {
+  if (r.data.type === 'ok') {
+    return r.data.value;
+  } else {
+    throw r.data.error;
+  }
+};
+
 const accounts = {
   create: async (data: {
     params?: Stripe.AccountCreateParams | undefined;
     options?: Stripe.RequestOptions | undefined;
   }) => {
-    const r = await functions.httpsCallable('stripe-accounts-create')(data)
-      .then(r => wrapResult<Stripe.Account>(r));
-    if (r.isOk()) { return r.value; } else { throw r.error; }
+    return await functions.httpsCallable('stripe-accounts-create')(data)
+      .then(r => wrapThrow<Stripe.Account>(r));
   },
   retrieve: async (data: {
     id: string;
     params?: Stripe.AccountRetrieveParams | undefined;
     options?: Stripe.RequestOptions | undefined;
   }) => {
-    const r = await functions.httpsCallable('stripe-accounts-retrieve')(data)
-      .then(r => wrapResult<Stripe.Account>(r));
-    if (r.isOk()) { return r.value; } else { throw r.error; }
+    return await functions.httpsCallable('stripe-accounts-retrieve')(data)
+      .then(r => wrapThrow<Stripe.Account>(r));
   },
 };
 
