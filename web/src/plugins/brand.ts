@@ -20,3 +20,6 @@ export const law = {
   '注文方法': 'インターネット上からご利用できます',
   '支払方法': 'クレジットカード',
 };
+
+export const contactFormLink =
+  'https://docs.google.com/forms/d/e/1FAIpQLSffHGpTxBYjtk0qma869D01yf8rOgIG5tCr8bh8QFcSToDYMg/viewform';

@@ -3,6 +3,7 @@ import { AuthContext, AuthProvider } from 'contexts/auth';
 import Home from 'views/Home';
 import About from 'views/About';
 import Policy from 'views/Policy';
+import Contact from 'views/Contact';
 import NotFound from 'views/NotFound';
 import NewFlyer from 'Flyer/new';
 import FlyerDetail from 'Flyer/detail';
@@ -35,6 +36,10 @@ export const routes = {
   policy: {
     path: '/policy',
     component: Policy,
+  },
+  contact: {
+    path: '/contact',
+    component: Contact,
   },
   login: {
     path: '/login',

@@ -177,12 +177,12 @@ const PoliciesBlock = () => {
   const policies = [
     { to: routes.policy.path, name: 'プライバシーポリシー' },
     { to: routes.law.path, name: '特定商取引法に基づく表記' },
-    // { to: routes.contact, name: 'お問い合わせ' },
+    { to: routes.contact.path, name: 'お問い合わせ' },
   ];
 
   return (
     <div style={{
-      padding: '8px 16px 8px 16px',
+      padding: '8px 0 8px 32px',
     }}>
       {policies.map(({ to, name }) => (
         <div>
