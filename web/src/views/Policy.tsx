@@ -1,13 +1,17 @@
 import React from 'react';
 import Paper from '@material-ui/core/Paper';
-import { law } from 'plugins/brand';
+import { useBreakpoint } from 'plugins/breakpoint';
 
 export default () => {
+  const breakpoint = useBreakpoint();
 
   return (
-    <Paper style={{
-      padding: 40,
-    }}>
+    <Paper style={(['L', 'M'].includes(breakpoint))
+      ? {
+        padding: 40,
+      } : {
+        padding: 10,
+      }}>
       <h1 style={{
         fontSize: 20,
       }}>プライバシーポリシー</h1>
