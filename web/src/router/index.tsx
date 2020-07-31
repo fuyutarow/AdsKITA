@@ -2,6 +2,9 @@ import React, { useState, useEffect, useContext } from 'react';
 import { AuthContext, AuthProvider } from 'contexts/auth';
 import Home from 'views/Home';
 import About from 'views/About';
+import Terms from 'views/Terms';
+import Policy from 'views/Policy';
+import Contact from 'views/Contact';
 import NotFound from 'views/NotFound';
 import NewFlyer from 'Flyer/new';
 import FlyerDetail from 'Flyer/detail';
@@ -14,6 +17,7 @@ import SpaceList from 'Space/List';
 import SpacePub from 'Space/Pub';
 import PublishedFlyer from 'Request/published';
 import Lab from 'views/Lab';
+import Law from 'views/Law';
 import PayView from 'PayView';
 import LabLink from 'views/Lab/link';
 import Redirect from 'redirect';
@@ -25,6 +29,22 @@ export const routes = {
     exact: true,
     path: '/',
     component: Home,
+  },
+  terms: {
+    path: '/terms',
+    component: Terms,
+  },
+  law: {
+    path: '/law',
+    component: Law,
+  },
+  policy: {
+    path: '/policy',
+    component: Policy,
+  },
+  contact: {
+    path: '/contact',
+    component: Contact,
   },
   login: {
     path: '/login',

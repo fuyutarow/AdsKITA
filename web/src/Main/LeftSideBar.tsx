@@ -1,7 +1,7 @@
 import { v4 as uuid } from 'uuid';
 
 import React, { useState, useEffect, useContext } from 'react';
-import { useHistory, Link } from 'react-router-dom';
+import { useHistory, Link, Router } from 'react-router-dom';
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 
 import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
@@ -173,6 +173,39 @@ const PlateButton: React.FC<{
     : <C />;
 };
 
+const PoliciesBlock = () => {
+  const policies = [
+    { to: routes.terms.path, name: '利用規約' },
+    { to: routes.policy.path, name: 'プライバシーポリシー' },
+    { to: routes.law.path, name: '特定商取引法に基づく表記' },
+    { to: routes.contact.path, name: 'お問い合わせ' },
+  ];
+
+  const fontStyle = {
+    color: brandColors.khaki,
+    fontSize: 14,
+  };
+
+  return (
+    <div style={{
+      padding: '8px 0 8px 25px',
+    }}>
+      {policies.map(({ to, name }) => (
+        <div>
+          <Link to={to}>
+            <span style={fontStyle}>
+              {name}
+            </span>
+          </Link>
+        </div>
+      ))}
+      <span style={fontStyle}>
+        © 2020 AdsKITA
+      </span>
+    </div>
+  );
+};
+
 const LeftSideBar: React.FC<{
   variant: 'permanent';
 } | {
@@ -234,12 +267,13 @@ const LeftSideBar: React.FC<{
       </List>
       <Divider />
       <div className={classes.bottomArea}>
+        <PoliciesBlock />
         <Divider />
         <List >
           <AuthAvatarPlate />
         </List>
       </div>
-    </SwipeableDrawer>
+    </SwipeableDrawer >
   );
 };
 
