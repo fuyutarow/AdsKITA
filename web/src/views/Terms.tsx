@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import Paper from '@material-ui/core/Paper';
 
 import { useBreakpoint } from 'plugins/breakpoint';
-import { policy } from 'plugins/brand';
+import { terms } from 'plugins/brand';
 import { routes } from 'router';
 
 export default () => {
@@ -19,13 +19,13 @@ export default () => {
       <h1 style={{
         fontSize: 20,
       }}>
-        {policy.title}
+        {terms.title}
       </h1>
       <div>
-        {policy.header && policy.header.split('\n').map(line => <div>{line}</div>)}
+        {terms.header && terms.header.split('\n').map(line => <div>{line}</div>)}
       </div>
 
-      {policy.terms.map(({ term, description }) => (
+      {terms.terms.map(({ term, description }) => (
         <div>
           <h2 style={{
             fontSize: 18,
@@ -35,14 +35,9 @@ export default () => {
           </div>
         </div>
       ))}
-      <div>
-        <Link to={routes.contact.path}>
-          お問い合わせ
-        </Link>
-      </div>
 
       <div>
-        {policy.footer && policy.footer.split('\n').map(line => <div>{line}</div>)}
+        {terms.footer && terms.footer.split('\n').map(line => <div>{line}</div>)}
       </div>
     </Paper>
   );

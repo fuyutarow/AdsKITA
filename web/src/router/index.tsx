@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { AuthContext, AuthProvider } from 'contexts/auth';
 import Home from 'views/Home';
 import About from 'views/About';
+import Terms from 'views/Terms';
 import Policy from 'views/Policy';
 import Contact from 'views/Contact';
 import NotFound from 'views/NotFound';
@@ -28,6 +29,10 @@ export const routes = {
     exact: true,
     path: '/',
     component: Home,
+  },
+  terms: {
+    path: '/terms',
+    component: Terms,
   },
   law: {
     path: '/law',
