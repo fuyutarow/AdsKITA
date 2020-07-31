@@ -14,6 +14,7 @@ import SpaceList from 'Space/List';
 import SpacePub from 'Space/Pub';
 import PublishedFlyer from 'Request/published';
 import Lab from 'views/Lab';
+import Law from 'views/Law';
 import PayView from 'PayView';
 import LabLink from 'views/Lab/link';
 import Redirect from 'redirect';
@@ -25,6 +26,10 @@ export const routes = {
     exact: true,
     path: '/',
     component: Home,
+  },
+  law: {
+    path: '/law',
+    component: Law,
   },
   login: {
     path: '/login',
