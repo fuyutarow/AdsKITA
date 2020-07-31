@@ -24,6 +24,16 @@ export const law = {
 export const contactFormLink =
   'https://docs.google.com/forms/d/e/1FAIpQLSffHGpTxBYjtk0qma869D01yf8rOgIG5tCr8bh8QFcSToDYMg/viewform';
 
-export const terms: Record<string, { body: string }> = require('./terms.json');
+export const terms: {
+  title?: string | undefined;
+  header?: string | undefined;
+  footer?: string | undefined;
+  terms: Array<{ term: string; description: string}>;
+} = require('./terms.json');
 
-export const policy: Record<string, { body: string }> = require('./policy.json');
+export const policy: {
+  title?: string | undefined;
+  header?: string | undefined;
+  footer?: string | undefined;
+  terms: Array<{ term: string; description: string}>;
+} = require('./policy.json');
