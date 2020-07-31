@@ -1,6 +1,6 @@
 {
   "name": "adskita",
-  "version": "0.202007.11-policy",
+  "version": "0.202007.12-policy",
   "private": true,
   "scripts": {
     "start": "react-scripts start",
