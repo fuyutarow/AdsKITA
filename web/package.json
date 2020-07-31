@@ -2,6 +2,18 @@
   "name": "adskita",
   "version": "0.202007.11-policy",
   "private": true,
+  "scripts": {
+    "start": "react-scripts start",
+    "deploy": "firebase deploy --only hosting",
+    "build": "GENERATE_SOURCEMAP=false react-scripts build",
+    "build:CI": "CI= npm run build",
+    "test": "react-scripts test",
+    "lint": "eslint . --fix -c .eslintrc.js --ext js,jsx,ts,tsx --ignore-pattern='!.*'",
+    "eject": "react-scripts eject",
+    "pub:terms": "yj -tj < src/plugins/brand/terms.toml | jq > src/plugins/brand/terms.json",
+    "pub:policy": "yj -tj < src/plugins/brand/policy.toml | jq > src/plugins/brand/policy.json",
+    "pub": "yarn run pub:terms  && yarn run pub:policy"
+  },
   "dependencies": {
     "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
@@ -35,17 +47,18 @@
     "react-toastify": "^6.0.8",
     "react-use": "^15.3.2",
     "stripe": "^8.78.0",
+    "toml": "^3.0.0",
     "typescript": "~3.9.7",
     "uuid": "^8.2.0"
   },
-  "scripts": {
-    "start": "react-scripts start",
-    "deploy": "firebase deploy --only hosting",
-    "build": "GENERATE_SOURCEMAP=false react-scripts build",
-    "build:CI": "CI= npm run build",
-    "test": "react-scripts test",
-    "lint": "eslint . --fix -c .eslintrc.js --ext js,jsx,ts,tsx --ignore-pattern='!.*'",
-    "eject": "react-scripts eject"
+  "devDependencies": {
+    "@types/axios": "^0.14.0",
+    "@types/is-url": "^1.2.28",
+    "@types/js-base64": "^3.0.0",
+    "@types/react-router-dom": "^5.1.5",
+    "@types/react-stripe-elements": "^6.0.4",
+    "@types/react-swipeable-views": "^0.13.0",
+    "@types/uuid": "^8.0.0"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -61,14 +74,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "@types/axios": "^0.14.0",
-    "@types/is-url": "^1.2.28",
-    "@types/js-base64": "^3.0.0",
-    "@types/react-router-dom": "^5.1.5",
-    "@types/react-stripe-elements": "^6.0.4",
-    "@types/react-swipeable-views": "^0.13.0",
-    "@types/uuid": "^8.0.0"
   }
 }
