@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { AuthContext, AuthProvider } from 'contexts/auth';
 import Home from 'views/Home';
 import About from 'views/About';
+import Policy from 'views/Policy';
 import NotFound from 'views/NotFound';
 import NewFlyer from 'Flyer/new';
 import FlyerDetail from 'Flyer/detail';
@@ -30,6 +31,10 @@ export const routes = {
   law: {
     path: '/law',
     component: Law,
+  },
+  policy: {
+    path: '/policy',
+    component: Policy,
   },
   login: {
     path: '/login',
