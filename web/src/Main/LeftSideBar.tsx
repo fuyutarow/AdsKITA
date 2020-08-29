@@ -113,9 +113,7 @@ const LogoTitle = () => {
         position: 'relative',
         top: -20,
       }}>
-        <Typography variant="body2">
-          v{version}
-        </Typography>
+        v{version}
       </div>
     </Link>
   );

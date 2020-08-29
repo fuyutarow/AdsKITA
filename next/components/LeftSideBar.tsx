@@ -26,7 +26,7 @@ import style from './style.module.css';
 import { debugToast } from 'plugins/debug';
 import { useBreakpoint } from 'plugins/breakpoint';
 import { version, isDevelopment } from 'plugins/env';
-import { brandColors, logo, } from 'plugins/brand';
+import { brandColors, logo, icons } from 'plugins/brand';
 import { AuthContext } from 'contexts/auth';
 
 // import './style.css';
@@ -58,7 +58,7 @@ const useStyles = makeStyles((theme: Theme) =>
       flexGrow: 1,
       padding: theme.spacing(3),
       backgroundColor: brandColors.ground,
-      'min-height': '100vh',
+      minHeight: '100vh',
     },
     version: {
 
@@ -79,54 +79,45 @@ const LogoTitle = () => {
   const breakpoint = useBreakpoint();
   const router = useRouter();
 
-  const ImgLogo = () => (['L', 'M'].includes(breakpoint))
-    ? (
-      <img {...{
-        src: logo,
-        width: 240 - 16 * 2,
-        style: {
-          marginTop: 8,
-          marginLeft: 16,
-        },
-      }} />
-    )
-    : (
-      <div style={{
-        textAlign: 'center',
-      }}>
-        <img {...{
-          src: logo,
-          height: 36,
-        }} />
-      </div >
-    );
-
   return (
-    <div
-      style={{
-        backgroundImage: `linear-gradient(#F1C5D3, ${brandColors.ground})`,
-        padding: '10px 0 10px 0',
-      }}
-      onClick={e => {
-        router.push({
-          pathname: '/',
-        });
-      }}
-    >
-      <div>
-        <ImgLogo />
-      </div>
+    <div onClick={e => { router.push({ pathname: '/' }); }} >
+      <ListItem>
+        <ListItemIcon>
+          <img src={icons[192]} height="36px" style={{
+            position: 'relative',
+            left: 3,
+            top: 5,
+          }} />
+        </ListItemIcon>
+        <ListItemText>
+          <Typography variant="h2">
+            <span style={{
+              color: brandColors.orange,
+              fontWeight: 700,
+              fontSize: 42,
+              position: 'relative',
+              left: -10,
+            }}>
+              AdsKITA
+            </span>
+          </Typography>
+        </ListItemText>
+      </ListItem>
       <div style={{
-        color: brandColors.red,
+        color: brandColors.orange,
         textAlign: 'center',
         position: 'relative',
-        // top: -20,
+        top: -20,
       }}>
-        <Typography variant="body2">
-          v{version}
+        <Typography>
+          <span style={{
+            fontSize: 12,
+          }}>
+            v{version}
+          </span>
         </Typography>
       </div>
-    </div>
+    </div >
   );
 };
 
@@ -225,9 +216,9 @@ const LeftSideBar: React.FC<{
       onClose={toggleDrawer(false)}
       onOpen={toggleDrawer(false)}
     >
-      {/* <List> */}
-      <LogoTitle />
-      {/* </List> */}
+      <List>
+        <LogoTitle />
+      </List>
       <Divider />
       <List>
         <PlateButton {...{
