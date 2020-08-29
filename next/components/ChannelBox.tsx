@@ -11,7 +11,7 @@ import ChartAgeAndGender from './ChartAgeAndGender';
 import ChartViewPercentWithCountry from './ChartViewPercentWithCountry';
 
 import { version } from 'plugins/env';
-import { logo2 } from 'plugins/brand';
+import { logo } from 'plugins/brand';
 import { humanizeJapanizeInt } from 'plugins/humanize';
 import { YoutubeChannelBasic, YoutubeChannelProfileV2, YoutubeChannelAudienceV2 } from 'models/youtube';
 
@@ -211,7 +211,7 @@ const ChannelBox: React.FC<{
             <div>
               <a href={`https://webtan.now.sh/youtube/${channelBasic.id}`}>
                 <img {...{
-                  src: logo2,
+                  src: logo,
                   width: 100,
                   style: {
                     padding: 5,

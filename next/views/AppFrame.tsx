@@ -27,7 +27,7 @@ import MoreIcon from '@material-ui/icons/MoreVert';
 import { useBreakpoint } from 'plugins/breakpoint';
 import { MetaHead } from 'headers';
 import { OGP } from 'models/ogp';
-import { logo, logo2, icons, brandColors } from 'plugins/brand';
+import { logo, icons, brandColors } from 'plugins/brand';
 import LeftSideBar from 'components/LeftSideBar';
 
 const drawerWidth = 240;
@@ -45,8 +45,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     appBar: {
       // width: `calc(100% - ${drawerWidth}px)`,
-      backgroundImage: brandColors.redToBlue,
-
+      backgroundColor: brandColors.ground,
     },
     drawer: {
       width: drawerWidth,
@@ -127,7 +126,7 @@ const Mobile: NextPage<{
             <MenuIcon />
           </IconButton>
           <img {...{
-            src: logo2,
+            src: logo,
             height: 36,
           }} />
           {/* <Button color="inherit">Login</Button> */}

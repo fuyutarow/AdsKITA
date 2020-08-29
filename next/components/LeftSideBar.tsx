@@ -26,7 +26,7 @@ import style from './style.module.css';
 import { debugToast } from 'plugins/debug';
 import { useBreakpoint } from 'plugins/breakpoint';
 import { version, isDevelopment } from 'plugins/env';
-import { brandColors, logo, logo2 } from 'plugins/brand';
+import { brandColors, logo, } from 'plugins/brand';
 import { AuthContext } from 'contexts/auth';
 
 // import './style.css';
@@ -95,7 +95,7 @@ const LogoTitle = () => {
         textAlign: 'center',
       }}>
         <img {...{
-          src: logo2,
+          src: logo,
           height: 36,
         }} />
       </div >
