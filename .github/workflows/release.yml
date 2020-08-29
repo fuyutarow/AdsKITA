@@ -23,18 +23,18 @@ jobs:
           git config --local user.name "GitHub Action"
       - name: Update version
         run: |
-          upver/bin/musl/upver up -rz web/package.json
-          VERSION=$(upver/bin/musl/upver show --core web/package.json)
+          upver/bin/musl/upver up -rz next/package.json
+          VERSION=$(upver/bin/musl/upver show --core next/package.json)
           git commit -am "[GitHub Actions] Update to v${VERSION}"
           git push
       - name: Release with tag
         run: |
-          VERSION=$(upver/bin/musl/upver show --core web/package.json)
+          VERSION=$(upver/bin/musl/upver show --core next/package.json)
           git tag v${VERSION}
           git push --tags
       - name: Create a branch and push it to deploy to Vercel
         run: |
-          VERSION=$(upver/bin/musl/upver show --core web/package.json)
+          VERSION=$(upver/bin/musl/upver show --core next/package.json)
           VERSION_without_dots=$(echo ${VERSION} | sed 's/\.//g')
           git switch -c ${VERSION}
           ( echo https://adskita-git-${VERSION_without_dots}.fuyutarow.vercel.app && cat README.md ) > temp && mv temp README.md

@@ -1,9 +1,7 @@
 import { v4 as uuid } from 'uuid';
-
+import { useRouter } from 'next/router';
 import React, { useState, useEffect, useContext } from 'react';
-import { useHistory, Link, Router } from 'react-router-dom';
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
-
 import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
 import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
@@ -21,20 +19,17 @@ import MenuItem from '@material-ui/core/MenuItem';
 import AlternateEmailIcon from '@material-ui/icons/AlternateEmail';
 import ViewModuleIcon from '@material-ui/icons/ViewModule';
 import DomainIcon from '@material-ui/icons/Domain';
+
 import AuthAvatarPlate from './AuthAvatarPlate';
-
-import { css } from 'emotion';
-
-import { debugToast } from 'plugins/debug';
-import { version, isDevelopment } from 'plugins/env';
-import { brandColors } from 'plugins/brand';
-import { AuthContext } from 'contexts/auth';
-import { routes } from 'router';
-
-import './style.css';
 import style from './style.module.css';
 
-import { logo, icons } from 'plugins/brand';
+import { debugToast } from 'plugins/debug';
+import { useBreakpoint } from 'plugins/breakpoint';
+import { version, isDevelopment } from 'plugins/env';
+import { brandColors, logo, icons } from 'plugins/brand';
+import { AuthContext } from 'contexts/auth';
+
+// import './style.css';
 
 const drawerWidth = 240;
 
@@ -63,7 +58,7 @@ const useStyles = makeStyles((theme: Theme) =>
       flexGrow: 1,
       padding: theme.spacing(3),
       backgroundColor: brandColors.ground,
-      'min-height': '100vh',
+      minHeight: '100vh',
     },
     version: {
 
@@ -81,10 +76,11 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 const LogoTitle = () => {
-  const history = useHistory();
+  const breakpoint = useBreakpoint();
+  const router = useRouter();
 
   return (
-    <Link to={routes.home.path}>
+    <div onClick={e => { router.push({ pathname: '/' }); }} >
       <ListItem>
         <ListItemIcon>
           <img src={icons[192]} height="36px" style={{
@@ -113,14 +109,19 @@ const LogoTitle = () => {
         position: 'relative',
         top: -20,
       }}>
-        v{version}
+        <Typography>
+          <span style={{
+            fontSize: 14,
+          }}>
+            v{version}
+          </span>
+        </Typography>
       </div>
-    </Link>
+    </div >
   );
 };
 
 const Tiles = () => {
-  const history = useHistory();
 
   return (
     <ListItem>
@@ -144,11 +145,11 @@ const Tiles = () => {
 const PlateButton: React.FC<{
   value: string;
   icon: React.ReactNode;
-  to?: any | undefined;
+  to?: string | undefined;
 }> = ({ value, icon, to }) => {
-  const history = useHistory();
+  const router = useRouter();
 
-  const C = () => (
+  const Main = () => (
     <ListItem>
       <ListItemIcon>
         {icon}
@@ -167,16 +168,27 @@ const PlateButton: React.FC<{
   );
 
   return to
-    ? <Link to={to}><C /></Link>
-    : <C />;
+    ? (
+      <div onClick={e => {
+        router.push({
+          pathname: to,
+          query: { from: 'home' },
+        });
+      }}>
+        <Main />
+      </div>
+    )
+    : <Main />;
 };
 
 const PoliciesBlock = () => {
+  const router = useRouter();
+
   const policies = [
-    { to: routes.terms.path, name: '利用規約' },
-    { to: routes.policy.path, name: 'プライバシーポリシー' },
-    { to: routes.law.path, name: '特定商取引法に基づく表記' },
-    { to: routes.contact.path, name: 'お問い合わせ' },
+    { to: '/terms', name: '利用規約' },
+    { to: '/policy', name: 'プライバシーポリシー' },
+    { to: '/law', name: '特定商取引法に基づく表記' },
+    { to: '/contact', name: 'お問い合わせ' },
   ];
 
   const fontStyle = {
@@ -189,12 +201,15 @@ const PoliciesBlock = () => {
       padding: '8px 0 8px 25px',
     }}>
       {policies.map(({ to, name }) => (
-        <div>
-          <Link to={to}>
-            <span style={fontStyle}>
-              {name}
-            </span>
-          </Link>
+        <div onClick={e => {
+          router.push({
+            pathname: to,
+            query: { from: 'home' },
+          });
+        }}>
+          <span style={fontStyle}>
+            {name}
+          </span>
         </div>
       ))}
       <span style={fontStyle}>
@@ -224,6 +239,13 @@ const LeftSideBar: React.FC<{
       ) {
         return;
       }
+      {/* <Divider />
+      <div className={classes.bottomArea}>
+        <Divider />
+        <List >
+          <AuthAvatarPlate />
+        </List>
+      </div> */}
       props.setOpen(open);
     };
 
@@ -245,33 +267,25 @@ const LeftSideBar: React.FC<{
       <Divider />
       <List>
         <PlateButton {...{
-          value: '広告を依頼',
+          value: 'ドメイン',
           icon: <AddCircleIcon style={iconStyle} />,
-          to: routes.flyerNew.path,
+          to: '/domains',
         }} />
         <PlateButton {...{
-          value: '出稿中',
+          value: 'Youtube',
           icon: <ViewModuleIcon style={iconStyle} />,
-          to: routes.requestList.path,
-        }} />
-      </List>
-      <Divider />
-      <List>
-        <PlateButton {...{
-          value: '広告を受ける',
-          icon: <DomainIcon style={iconStyle} />,
-          to: routes.spaceList.path,
+          to: '/youtube',
         }} />
       </List>
       <Divider />
       <div className={classes.bottomArea}>
         <PoliciesBlock />
         <Divider />
-        <List >
+        {/* <List >
           <AuthAvatarPlate />
-        </List>
+        </List> */}
       </div>
-    </SwipeableDrawer >
+    </SwipeableDrawer>
   );
 };
 

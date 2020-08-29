@@ -1,0 +1,87 @@
+import React, { useState, useEffect, useContext } from 'react';
+import Typography from '@material-ui/core/Typography';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import Avatar from '@material-ui/core/Avatar';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import Link from 'next/link';
+
+import style from './style.module.css';
+
+import { AuthContext } from 'contexts/auth';
+
+export default () => {
+  const auth = useContext(AuthContext);
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+
+  const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  useEffect(() => {
+    if (!auth) return;
+    const currentUser = auth.user;
+  }, [auth]);
+
+  return auth
+    ? (
+      <div>
+        <div onClick={handleMenu} >
+          {
+            auth.user.photoURL
+              ? (
+                <ListItem>
+                  <ListItemIcon>
+                    <div style={{ position: 'relative', left: 3 }}>
+                      <Avatar
+                        src={auth.user.photoURL as string}
+                      />
+                    </div>
+                  </ListItemIcon>
+                  <ListItemText>
+                    <Typography variant="h6">
+                      <span className={style['User-name']}>
+                        {auth.user.displayName}
+                      </span>
+                    </Typography>
+                  </ListItemText>
+                </ListItem>
+              )
+              : <Avatar />
+          }
+        </div>
+        <Menu
+          id="menu-appbar"
+          anchorEl={anchorEl}
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+          }}
+          keepMounted
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+          }}
+          open={open}
+          onClose={handleClose}
+        >
+          <MenuItem onClick={() => auth.signOut()}>ログアウト</MenuItem>
+        </Menu>
+      </div >
+    )
+    : (
+      <ListItem>
+        <ListItemIcon>
+          <Avatar />
+        </ListItemIcon>
+        <ListItemText>ログイン</ListItemText>
+      </ListItem>
+    );
+};
