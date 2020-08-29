@@ -1,6 +1,6 @@
 {
-  "short_name": "webtan",
-  "name": "webtan",
+  "short_name": "AdsKITA",
+  "name": "AdsKITA",
   "icons": [
     {
       "src": "favicon.ico",
@@ -20,6 +20,6 @@
   ],
   "start_url": "/",
   "display": "standalone",
-  "theme_color": "#D7265D",
-  "background_color": "#EAF5FC"
+  "theme_color": "#F94F15",
+  "background_color": "#ffffff"
 }
