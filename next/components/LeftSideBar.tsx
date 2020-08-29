@@ -111,7 +111,7 @@ const LogoTitle = () => {
       }}>
         <Typography>
           <span style={{
-            fontSize: 12,
+            fontSize: 14,
           }}>
             v{version}
           </span>
@@ -185,10 +185,10 @@ const PoliciesBlock = () => {
   const router = useRouter();
 
   const policies = [
-    //   { to: routes.terms.path, name: '利用規約' },
-    //   { to: routes.policy.path, name: 'プライバシーポリシー' },
-    //   { to: routes.law.path, name: '特定商取引法に基づく表記' },
-    { to: '/about', name: 'お問い合わせ' },
+    { to: '/terms', name: '利用規約' },
+    { to: '/policy', name: 'プライバシーポリシー' },
+    { to: '/law', name: '特定商取引法に基づく表記' },
+    { to: '/contact', name: 'お問い合わせ' },
   ];
 
   const fontStyle = {
@@ -210,11 +210,11 @@ const PoliciesBlock = () => {
           <span style={fontStyle}>
             {name}
           </span>
-          <span style={fontStyle}>
-            © 2020 AdsKITA
-          </span>
         </div>
       ))}
+      <span style={fontStyle}>
+        © 2020 AdsKITA
+      </span>
     </div>
   );
 };
@@ -239,6 +239,13 @@ const LeftSideBar: React.FC<{
       ) {
         return;
       }
+      {/* <Divider />
+      <div className={classes.bottomArea}>
+        <Divider />
+        <List >
+          <AuthAvatarPlate />
+        </List>
+      </div> */}
       props.setOpen(open);
     };
 
