@@ -181,6 +181,44 @@ const PlateButton: React.FC<{
     : <Main />;
 };
 
+const PoliciesBlock = () => {
+  const router = useRouter();
+
+  const policies = [
+    //   { to: routes.terms.path, name: '利用規約' },
+    //   { to: routes.policy.path, name: 'プライバシーポリシー' },
+    //   { to: routes.law.path, name: '特定商取引法に基づく表記' },
+    { to: '/about', name: 'お問い合わせ' },
+  ];
+
+  const fontStyle = {
+    color: brandColors.khaki,
+    fontSize: 14,
+  };
+
+  return (
+    <div style={{
+      padding: '8px 0 8px 25px',
+    }}>
+      {policies.map(({ to, name }) => (
+        <div onClick={e => {
+          router.push({
+            pathname: to,
+            query: { from: 'home' },
+          });
+        }}>
+          <span style={fontStyle}>
+            {name}
+          </span>
+          <span style={fontStyle}>
+            © 2020 AdsKITA
+          </span>
+        </div>
+      ))}
+    </div>
+  );
+};
+
 const LeftSideBar: React.FC<{
   variant: 'permanent';
 } | {
@@ -232,13 +270,14 @@ const LeftSideBar: React.FC<{
           to: '/youtube',
         }} />
       </List>
-      {/* <Divider />
+      <Divider />
       <div className={classes.bottomArea}>
+        <PoliciesBlock />
         <Divider />
-        <List >
+        {/* <List >
           <AuthAvatarPlate />
-        </List>
-      </div> */}
+        </List> */}
+      </div>
     </SwipeableDrawer>
   );
 };

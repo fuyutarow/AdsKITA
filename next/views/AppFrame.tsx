@@ -91,7 +91,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 const Desktop: NextPage<{
-  ogp: OGP
+  ogp?: OGP | undefined
 }> = ({ ogp, children }) => {
   const classes = useStyles();
 
@@ -107,7 +107,7 @@ const Desktop: NextPage<{
 };
 
 const Mobile: NextPage<{
-  ogp: OGP
+  ogp?: OGP | undefined
 }> = ({ ogp, children }) => {
   const classes = useStyles();
   const [openLeft, setOpenLeft] = useState(false);
@@ -141,7 +141,7 @@ const Mobile: NextPage<{
 };
 
 const Page: NextPage<{
-  ogp: OGP
+  ogp?: OGP | undefined
 }> = ({ ogp, children }) => {
   const breakpoint = useBreakpoint();
 

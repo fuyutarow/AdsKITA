@@ -3,44 +3,68 @@ import Head from 'next/head';
 import { OGP } from 'models/ogp';
 
 export const MetaHead: React.FC<{
-  ogp: OGP
+  ogp?: OGP | undefined
 }> = ({ ogp }) => {
+  const {
+    title, url, description, twitterCard, locale, siteName, imageUrl,
+  } = {
+    title: 'AdsKITA',
+    url: 'https://adskita.now.sh',
+    description: 'AdsKITA',
+    twitterCard: 'summary',
+    locale: 'ja_JP',
+    siteName: 'AdsKITA',
+    ...ogp,
+  };
+
+  const og = {
+    title,
+    description,
+    type: 'website',
+    siteName,
+    locale,
+    url,
+    imageUrl,
+  };
+
+  const twitter = {
+    card: twitterCard,
+  };
+
   return (
     <Head>
-      <title>{ogp.title || 'webtan'}</title>
+      <title>{title}</title>
       {/* <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width" /> */}
       <link rel="icon" href="/favicon.ico" />
       <link {... {
         rel: 'canonical',
-        href: ogp.url,
+        href: url,
       }} />
-      <meta property="og:type" content="website" />
-      <meta property="og:site_name" content="webtan" />
-      <meta property="og:locale" content="ja_JP" />
+      <meta property="og:type" content={og.type} />
+      <meta property="og:site_name" content={og.siteName} />
+      <meta property="og:locale" content={og.locale} />
       <meta {...{
         property: 'og:url',
-        content: ogp.url,
+        content: og.url,
       }} />
       <meta {...{
         property: 'og:title',
-        content: ogp.title,
+        content: og.title,
       }} />
       <meta {...{
         property: 'og:description',
-        content: ogp.description,
+        content: og.description,
       }} />
-      <meta {...{
-        property: 'og:image',
-        content: ogp.imageUrl,
-      }} />
-      <meta {...{
-        property: 'twitter:image',
-        content: ogp.imageUrl,
-      }} />
-      {ogp.twitterCard &&
+      {og.imageUrl &&
+        <meta {...{
+          property: 'og:image',
+          content: og.imageUrl,
+        }} />
+      }
+      {twitter.card &&
         <meta {...{
           property: 'twitter:card',
-          content: ogp.twitterCard,
+          content: twitter.card,
         }} />
       }
     </Head>
