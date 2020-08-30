@@ -1,6 +1,6 @@
 {
   "name": "webtan-next",
-  "version": "0.202008.6",
+  "version": "0.202008.7",
   "private": true,
   "scripts": {
     "dev": "next dev",
