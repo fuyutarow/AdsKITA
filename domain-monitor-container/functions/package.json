@@ -1,0 +1,20 @@
+{
+  "name": "pv-monitor",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "github": "node src/github.js",
+    "brain": "node src/brain.js",
+    "deploy": "gcloud functions deploy fetchSimilarweb --runtime nodejs10 --trigger-http --region asia-northeast1",
+    "lint": "eslint . --fix -c .eslintrc.js --ext js,jsx,ts,tsx --ignore-pattern='!.*'"
+  },
+  "dependencies": {
+    "request": "^2.88.2",
+    "similarweb-scrape": "^0.0.1"
+  },
+  "devDependencies": {
+    "eslint": "^7.1.0",
+    "eslint-config-google": "^0.14.0"
+  }
+}
