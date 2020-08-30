@@ -1,5 +1,5 @@
 import * as functions from 'firebase-functions';
-const request = require('request');
+import * as request from 'request';
 
 const message = `
 Dear my friend
@@ -21,10 +21,5 @@ export const notice = functions.https.onCall((data, context) => {
   return { data: 'Ok' };
 });
 
-import { paymentIntents } from './paymentIntents';
-import { accounts } from './accounts';
-
-export const stripe = {
-  paymentIntents,
-  accounts,
-};
+export * as domainMonitor from './domainMonitor';
+export { stripe } from './stripe';
